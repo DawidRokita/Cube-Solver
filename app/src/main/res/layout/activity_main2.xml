@@ -8,6 +8,8 @@
     android:scrollbarAlwaysDrawVerticalTrack="true"
     tools:context=".MainActivity2">
 
+
+
     <Button
         android:id="@+id/button"
         android:layout_width="60dp"
