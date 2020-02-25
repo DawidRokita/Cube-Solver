@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.annotation.Nullable;
+
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,10 +26,11 @@ public class MainActivity2 extends AppCompatActivity {
 
     int licznik = 0;
     private Button white, red, green, orange, blue, yellow, divider, reset, lewo, prawo, dol, gora, solve, next, send;
-    private Button c1, c2, c3, c4, c5, c6, c7, c8, c9;
-    private TextView textView2, textView3, textView4, textView5;
+    private Button c1, c2, c3, c4, c5, c6, c7, c8, c9, graphic;
+    private TextView textView2, textView3, textView4, textView5, textView23;
     String col1, col2, col3, col4, col5, col6, colr7, col8, col9,resultat;
     String result, scrambledCube;
+
 
 
     @Override
@@ -51,7 +54,6 @@ public class MainActivity2 extends AppCompatActivity {
         solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 scrambledCube = textView3.getText().toString();
                 simpleSolve(scrambledCube);
                 textView5.setText(result);
@@ -61,9 +63,10 @@ public class MainActivity2 extends AppCompatActivity {
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.VISIBLE);
 
+                graphic.setVisibility(View.VISIBLE);
+
                 clearcube();
                 saveData();
-
             }
         });
 
@@ -76,9 +79,14 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-        loadData();
-        updateViews();
+        graphic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity6();
+            }
+        });
 
+        loadData();
 
     }
 
@@ -123,11 +131,13 @@ public class MainActivity2 extends AppCompatActivity {
         dol = (Button) findViewById(R.id.dol);
         gora = (Button) findViewById(R.id.button8);
         solve = (Button) findViewById(R.id.solve);
+        graphic = (Button) findViewById(R.id.button12);
 
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
         textView4 = (TextView) findViewById(R.id.textView4);
         textView5 = (TextView) findViewById(R.id.textView5);
+        textView23 = (TextView) findViewById(R.id.textView23);
 
     }
 
@@ -374,6 +384,7 @@ public class MainActivity2 extends AppCompatActivity {
                 next.setVisibility(View.VISIBLE);
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.INVISIBLE);
+                graphic.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -416,7 +427,6 @@ public class MainActivity2 extends AppCompatActivity {
                             btn.setTextColor(0xFFFFEA00);
                             break;
                     }
-
             }
         });
     }
@@ -517,5 +527,10 @@ public class MainActivity2 extends AppCompatActivity {
 
     public void simpleSolve(String scrambledCube) {
         result = new Search().solution(scrambledCube, 21, 100000000, 0, 0);
+    }
+
+    public void openActivity6(){
+        Intent intent = new Intent(this, MainActivity6.class);
+        startActivity(intent);
     }
 }

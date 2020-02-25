@@ -22,8 +22,6 @@ public class MainActivity4 extends AppCompatActivity {
         hidetext();
 
 
-
-
     }
 
     private void setupUIViews(){

@@ -215,7 +215,7 @@
 
     <Button
         android:id="@+id/next"
-        android:layout_width="180dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -238,7 +238,7 @@
 
     <Button
         android:id="@+id/reset"
-        android:layout_width="180dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
@@ -325,7 +325,7 @@
 
     <Button
         android:id="@+id/button11"
-        android:layout_width="180dp"
+        android:layout_width="160dp"
         android:layout_height="45dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -346,5 +346,25 @@
         app:layout_constraintBottom_toTopOf="@+id/c2"
         app:layout_constraintEnd_toEndOf="@+id/c2"
         app:layout_constraintStart_toStartOf="@+id/c2" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="49dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/cubes"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

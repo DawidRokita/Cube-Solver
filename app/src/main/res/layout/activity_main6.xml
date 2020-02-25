@@ -5,31 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#212225"
-    tools:context=".MainActivity5">
+    tools:context=".MainActivity6">
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
-
-    <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/textView24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="ROZWIĄZANIE DO WYSŁANIA:"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="ROZWIĄZANIE KOSTKI"
+        android:textColor="#9FFFFFFF"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/divider9"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#9FFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
