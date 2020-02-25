@@ -138,7 +138,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:gravity="center"
-        android:text="Klikając SOLVE w dolnej części aplikacji pokarze się rozwiązanie"
+        android:text="Klikając SOLVE w dolnej części aplikacji pokaże się rozwiązanie"
         android:textColor="#945757"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
