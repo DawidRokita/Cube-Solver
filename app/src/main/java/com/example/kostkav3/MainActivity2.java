@@ -82,9 +82,12 @@ public class MainActivity2 extends AppCompatActivity {
         graphic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity6();
+                Intent intent = new Intent(MainActivity2.this, MainActivity6.class);
+                intent.putExtra("message_key",result);
+                startActivity(intent);
             }
         });
+
 
         loadData();
 
