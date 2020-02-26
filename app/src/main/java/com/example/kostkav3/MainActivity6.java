@@ -3,6 +3,7 @@ package com.example.kostkav3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,25 +34,25 @@ public class MainActivity6 extends AppCompatActivity {
                 part = cutstr[i];
 
                 switch (part){
-                    case "R":   tabbtn[i].setBackgroundResource(R.drawable.ruchr);   break;
-                    case "U":   tabbtn[i].setText("ruch U");   break;
-                    case "L":   tabbtn[i].setBackgroundResource(R.drawable.ruchl);   break;
-                    case "D":   tabbtn[i].setBackgroundResource(R.drawable.ruchd);   break;
-                    case "F":   tabbtn[i].setBackgroundResource(R.drawable.ruchf);   break;
-                    case "B":   tabbtn[i].setText("ruch B");   break;
-                    case "R\'":   tabbtn[i].setBackgroundResource(R.drawable.ruchrprim);   break;
-                    case "U\'":   tabbtn[i].setText("ruch U\'");   break;
-                    case "L\'":   tabbtn[i].setBackgroundResource(R.drawable.ruchlprim);   break;
-                    case "D\'":   tabbtn[i].setBackgroundResource(R.drawable.ruchdprim);   break;
-                    case "F\'":   tabbtn[i].setBackgroundResource(R.drawable.ruchfprim);   break;
-                    case "B\'":   tabbtn[i].setText("ruch B\'");   break;
-                    case "R2":   tabbtn[i].setBackgroundResource(R.drawable.ruchrr);   break;
-                    case "U2":   tabbtn[i].setText("ruch U2");   break;
-                    case "L2":   tabbtn[i].setBackgroundResource(R.drawable.ruchll);   break;
-                    case "D2":   tabbtn[i].setBackgroundResource(R.drawable.ruchdd);   break;
-                    case "F2":   tabbtn[i].setBackgroundResource(R.drawable.ruchff);   break;
-                    case "B2":   tabbtn[i].setText("ruch B2");   break;
-                    default:    Toast.makeText(MainActivity6.this, "Nie ma rozwiązania dla tego układu kostki", Toast.LENGTH_LONG).show();     break;
+                    case "R":       tabbtn[i].setBackgroundResource(R.drawable.ruchr);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "U":       tabbtn[i].setBackgroundResource(R.drawable.ruchu);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "L":       tabbtn[i].setBackgroundResource(R.drawable.ruchl);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "D":       tabbtn[i].setBackgroundResource(R.drawable.ruchd);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "F":       tabbtn[i].setBackgroundResource(R.drawable.ruchf);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "B":       tabbtn[i].setBackgroundResource(R.drawable.ruchb);        tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "R\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchrprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "U\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchuprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "L\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchlprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "D\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchdprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "F\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchfprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "B\'":     tabbtn[i].setBackgroundResource(R.drawable.ruchbprim);    tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "R2":      tabbtn[i].setBackgroundResource(R.drawable.ruchrr);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "U2":      tabbtn[i].setBackgroundResource(R.drawable.ruchuu);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "L2":      tabbtn[i].setBackgroundResource(R.drawable.ruchll);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "D2":      tabbtn[i].setBackgroundResource(R.drawable.ruchdd);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "F2":      tabbtn[i].setBackgroundResource(R.drawable.ruchff);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    case "B2":      tabbtn[i].setBackgroundResource(R.drawable.ruchbb);       tabbtn[i].setVisibility(View.VISIBLE);   break;
+                    default:        Toast.makeText(MainActivity6.this, "Nie ma rozwiązania dla tego układu kostki", Toast.LENGTH_LONG).show();     break;
                 }
 
             }

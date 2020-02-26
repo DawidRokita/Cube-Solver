@@ -17,6 +17,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole21"
             app:layout_constraintStart_toEndOf="@+id/pole19"
             app:layout_constraintTop_toBottomOf="@+id/pole17" />
@@ -29,6 +30,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole16" />
 
@@ -40,6 +42,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole12" />
 
@@ -49,6 +52,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole15"
             app:layout_constraintStart_toEndOf="@+id/pole13"
             app:layout_constraintTop_toBottomOf="@+id/pole11" />
@@ -104,6 +108,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
@@ -113,6 +118,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole3"
             app:layout_constraintStart_toEndOf="@+id/pole1"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
@@ -125,6 +131,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
@@ -136,6 +143,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole1" />
 
@@ -145,6 +153,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole6"
             app:layout_constraintStart_toEndOf="@+id/pole4"
             app:layout_constraintTop_toBottomOf="@+id/pole2" />
@@ -157,6 +166,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole3" />
 
@@ -168,6 +178,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole4" />
 
@@ -177,6 +188,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole9"
             app:layout_constraintStart_toEndOf="@+id/pole7"
             app:layout_constraintTop_toBottomOf="@+id/pole5" />
@@ -189,6 +201,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole6" />
 
@@ -200,6 +213,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole7" />
 
@@ -209,6 +223,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole12"
             app:layout_constraintStart_toEndOf="@+id/pole10"
             app:layout_constraintTop_toBottomOf="@+id/pole8" />
@@ -221,6 +236,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole9" />
 
@@ -232,6 +248,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole10" />
 
@@ -243,6 +260,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole13" />
 
@@ -252,6 +270,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole18"
             app:layout_constraintStart_toEndOf="@+id/pole16"
             app:layout_constraintTop_toBottomOf="@+id/pole14" />
@@ -264,6 +283,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole15" />
 
@@ -275,6 +295,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole18" />
 
@@ -286,6 +307,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole19" />
 
@@ -295,6 +317,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/pole24"
             app:layout_constraintStart_toEndOf="@+id/pole22"
             app:layout_constraintTop_toBottomOf="@+id/pole20" />
@@ -307,6 +330,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="#212225"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole21" />
 
