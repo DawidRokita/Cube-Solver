@@ -532,8 +532,4 @@ public class MainActivity2 extends AppCompatActivity {
         result = new Search().solution(scrambledCube, 21, 100000000, 0, 0);
     }
 
-    public void openActivity6(){
-        Intent intent = new Intent(this, MainActivity6.class);
-        startActivity(intent);
-    }
 }

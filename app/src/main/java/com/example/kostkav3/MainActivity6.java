@@ -54,9 +54,7 @@ public class MainActivity6 extends AppCompatActivity {
                     case "B2":      tabbtn[i].setBackgroundResource(R.drawable.ruchbb);       tabbtn[i].setVisibility(View.VISIBLE);   break;
                     default:        Toast.makeText(MainActivity6.this, "Nie ma rozwiązania dla tego układu kostki", Toast.LENGTH_LONG).show();     break;
                 }
-
             }
-
         }
 
 

@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 public class MainActivity4 extends AppCompatActivity {
 
-    private TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8,tv9;
+    private TextView tv1,tv2,tv3,tv4,tv5,tv6,tv7,tv8,tv9, nowy1, nowy3, nowy5, nowy6;
     int licznik=0,licznik2=0,licznik3=0,licznik4=0;
-    private ImageView img1, img2,img3,img4,img5;
+    private ImageView img1, img2,img3, nowy2, nowy4, nowy7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,13 @@ public class MainActivity4 extends AppCompatActivity {
         img1 = (ImageView) findViewById(R.id.imageView2);
         img2 = (ImageView) findViewById(R.id.imageView3);
         img3 = (ImageView) findViewById(R.id.imageView4);
-        img4 = (ImageView) findViewById(R.id.imageView5);
-        img5 = (ImageView) findViewById(R.id.imageView6);
+        nowy1 = (TextView) findViewById(R.id.nowy1);
+        nowy2 = (ImageView) findViewById(R.id.nowy2);
+        nowy3 = (TextView) findViewById(R.id.nowy3);
+        nowy4 = (ImageView) findViewById(R.id.nowy4);
+        nowy5 = (TextView) findViewById(R.id.nowy5);
+        nowy6 = (TextView) findViewById(R.id.nowy6);
+        nowy7 = (ImageView) findViewById(R.id.nowy7);
     }
 
     private void hidetext(){
@@ -49,9 +54,17 @@ public class MainActivity4 extends AppCompatActivity {
                 if(licznik<1){
                     tv2.setVisibility(View.VISIBLE);
                     img1.setVisibility(View.VISIBLE);
+                    nowy1.setVisibility(View.VISIBLE);
+                    nowy2.setVisibility(View.VISIBLE);
+                    nowy3.setVisibility(View.VISIBLE);
+                    nowy4.setVisibility(View.VISIBLE);
                 }else{
                     tv2.setVisibility(View.GONE);
                     img1.setVisibility(View.GONE);
+                    nowy1.setVisibility(View.GONE);
+                    nowy2.setVisibility(View.GONE);
+                    nowy3.setVisibility(View.GONE);
+                    nowy4.setVisibility(View.GONE);
                 }
                 if(licznik==0){
                     licznik++;
@@ -69,11 +82,17 @@ public class MainActivity4 extends AppCompatActivity {
                     tv5.setVisibility(View.VISIBLE);
                     img2.setVisibility(View.VISIBLE);
                     img3.setVisibility(View.VISIBLE);
+                    nowy5.setVisibility(View.VISIBLE);
+                    nowy6.setVisibility(View.VISIBLE);
+                    nowy7.setVisibility(View.VISIBLE);
                 }else{
                     tv4.setVisibility(View.GONE);
                     tv5.setVisibility(View.GONE);
                     img2.setVisibility(View.GONE);
                     img3.setVisibility(View.GONE);
+                    nowy5.setVisibility(View.GONE);
+                    nowy6.setVisibility(View.GONE);
+                    nowy7.setVisibility(View.GONE);
                 }
                 if(licznik2==0){
                     licznik2++;
@@ -104,12 +123,8 @@ public class MainActivity4 extends AppCompatActivity {
             public void onClick(View v) {
                 if(licznik4<1){
                     tv9.setVisibility(View.VISIBLE);
-                    img4.setVisibility(View.VISIBLE);
-                    img5.setVisibility(View.VISIBLE);
                 }else{
                     tv9.setVisibility(View.GONE);
-                    img4.setVisibility(View.GONE);
-                    img5.setVisibility(View.GONE);
                 }
                 if(licznik4==0){
                     licznik4++;
