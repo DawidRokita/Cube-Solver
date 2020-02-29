@@ -20,6 +20,8 @@ public class MainActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main6);
 
+        Toast.makeText(MainActivity6.this, "Kostkę trzymaj tak aby środkowy kolor górnej ściany był biały a przedniej zielony", Toast.LENGTH_LONG).show();
+
         setupUIViews();
 
         Button[] tabbtn = {pole1,pole2,pole3,pole4,pole5,pole6,pole7,pole8,pole9,pole10,pole11,pole12,pole13,pole14,pole15,pole16,pole17,pole18,pole19,pole20,pole21,pole22,pole23,pole24};

@@ -65,6 +65,10 @@ public class MainActivity2 extends AppCompatActivity {
 
                 graphic.setVisibility(View.VISIBLE);
 
+                if(result == "Brak rozwiązania"){
+                    Toast.makeText(MainActivity2.this, "Żle wprowadzono układ kolorów na kostce", Toast.LENGTH_LONG).show();
+                }
+
                 clearcube();
                 saveData();
             }
@@ -439,6 +443,8 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 licznik++;
                 textcube();
 
@@ -521,8 +527,9 @@ public class MainActivity2 extends AppCompatActivity {
                         reset.setVisibility(View.INVISIBLE);
                         send.setVisibility(View.INVISIBLE);
                         break;
-
                 }
+
+
 
             }
         });
