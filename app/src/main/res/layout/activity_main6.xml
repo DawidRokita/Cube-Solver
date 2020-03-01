@@ -18,19 +18,18 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole21"
-            app:layout_constraintStart_toEndOf="@+id/pole19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole17" />
 
         <Button
             android:id="@+id/pole19"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole20"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole16" />
 
@@ -39,11 +38,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole14"
             app:layout_constraintTop_toBottomOf="@+id/pole12" />
 
         <Button
@@ -53,8 +51,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole15"
-            app:layout_constraintStart_toEndOf="@+id/pole13"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole11" />
 
     <TextView
@@ -104,11 +102,10 @@
             android:id="@+id/pole1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
@@ -119,8 +116,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole3"
-            app:layout_constraintStart_toEndOf="@+id/pole1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
         <Button
@@ -128,22 +125,20 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole2"
             app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
         <Button
             android:id="@+id/pole4"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole1" />
 
@@ -154,8 +149,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole6"
-            app:layout_constraintStart_toEndOf="@+id/pole4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole2" />
 
         <Button
@@ -163,22 +158,20 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole5"
             app:layout_constraintTop_toBottomOf="@+id/pole3" />
 
         <Button
             android:id="@+id/pole7"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole4" />
 
@@ -189,8 +182,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole9"
-            app:layout_constraintStart_toEndOf="@+id/pole7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole5" />
 
         <Button
@@ -198,22 +191,20 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole8"
             app:layout_constraintTop_toBottomOf="@+id/pole6" />
 
         <Button
             android:id="@+id/pole10"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole11"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole7" />
 
@@ -224,8 +215,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole12"
-            app:layout_constraintStart_toEndOf="@+id/pole10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole8" />
 
         <Button
@@ -233,22 +224,20 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole11"
             app:layout_constraintTop_toBottomOf="@+id/pole9" />
 
         <Button
             android:id="@+id/pole13"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole10" />
 
@@ -256,11 +245,10 @@
             android:id="@+id/pole16"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole17"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole13" />
 
@@ -271,8 +259,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole18"
-            app:layout_constraintStart_toEndOf="@+id/pole16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole14" />
 
         <Button
@@ -280,11 +268,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole17"
             app:layout_constraintTop_toBottomOf="@+id/pole15" />
 
         <Button
@@ -292,22 +279,20 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole20"
             app:layout_constraintTop_toBottomOf="@+id/pole18" />
 
         <Button
             android:id="@+id/pole22"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/pole23"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole19" />
 
@@ -318,8 +303,8 @@
             android:layout_marginTop="32dp"
             android:background="#212225"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/pole24"
-            app:layout_constraintStart_toEndOf="@+id/pole22"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pole20" />
 
         <Button
@@ -327,11 +312,10 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
             android:background="#212225"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pole23"
             app:layout_constraintTop_toBottomOf="@+id/pole21" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
