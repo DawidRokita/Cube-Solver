@@ -153,43 +153,40 @@
 
         <View
             android:id="@+id/divider5"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="#4DFFFFFF"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nowy4" />
 
         <View
             android:id="@+id/divider6"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="#4DFFFFFF"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nowy7" />
 
         <View
             android:id="@+id/divider7"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="#4DFFFFFF"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
         <View
             android:id="@+id/divider8"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="#4DFFFFFF"
@@ -363,7 +360,7 @@
 
         <View
             android:id="@+id/divider11"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="#4DFFFFFF"
