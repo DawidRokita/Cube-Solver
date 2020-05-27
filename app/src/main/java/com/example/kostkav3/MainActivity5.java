@@ -27,7 +27,7 @@ public class MainActivity5 extends AppCompatActivity {
     public BluetoothSocket btSocket;
 
     public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID //nie trzeba zmieniac
-    public static final String SERVICE_ADDRESS = "04:B1:67:8A:8E:84"; // HC-05 BT ADDRESS
+    public static final String SERVICE_ADDRESS = "00:19:10:08:C3:22"; // HC-05 BT ADDRESS TUTAJ JEST ADRES HC-05 D.R.1
 
 
     @Override

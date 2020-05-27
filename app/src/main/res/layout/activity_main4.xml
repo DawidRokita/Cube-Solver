@@ -74,7 +74,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text='Po wprowadzeniu Wszystkich pól aplikacja poinformuje cię o tym napisem w górnej części ekranu napisem "dzięki za wprowadzenie stanu kostki"'
+            android:text='Po wprowadzeniu Wszystkich pól aplikacja poinformuje cię o tym napisem w górnej części ekranu: "dzięki za wprowadzenie stanu kostki"'
             android:textColor="#9FFFFFFF"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -367,6 +367,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView33" />
+
+        <VideoView
+            android:id="@+id/Video_view"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text='Instrukcja'
+            app:layout_constraintBottom_toBottomOf="@+id/textView20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/divider8"
+            app:layout_constraintVertical_bias="0.0" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
