@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button solve,info,instuct;
+    private Button solve,info,instuct, scramble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        scramble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openscramble();
+            }
+        });
+
 
     }
 
@@ -47,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         solve = (Button) findViewById(R.id.button7);
         instuct = (Button) findViewById(R.id.button9);
         info = (Button) findViewById(R.id.button10);
+        scramble = (Button) findViewById(R.id.button14);
     }
 
     public void openActivity2(){
@@ -61,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openActivity4(){
         Intent intent = new Intent(this, MainActivity4.class);
+        startActivity(intent);
+    }
+
+    public void openscramble(){
+        Intent intent = new Intent(this, scramble.class);
         startActivity(intent);
     }
 

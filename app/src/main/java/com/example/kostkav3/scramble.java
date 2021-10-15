@@ -18,19 +18,22 @@ import android.content.Intent;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity5 extends AppCompatActivity {
+public class scramble extends AppCompatActivity {
 
-    private String part;
+    private String part, scrambStr;
     private String[] cutstr;
-    public Button button, lista, polacz;
+    public Button button, lista, polacz, solve;
     private TextView textView, textView2, textView34;
     public ListView listView;
     public BluetoothAdapter btAdapter;
     public BluetoothDevice btDevice;
     public BluetoothSocket btSocket;
+    private String[] ruchy = {"R", "L", "U", "D", "F", "B"};
+
 
     public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID //nie trzeba zmieniac
     //public static final String SERVICE_ADDRESS = "00:19:10:08:C3:22"; // HC-05 BT ADDRESS TUTAJ JEST ADRES HC-05 D.R.1
@@ -39,43 +42,9 @@ public class MainActivity5 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main5);
+        setContentView(R.layout.activity_scramble);
 
-        String result = getIntent().getExtras().getString("message_key");
         setupUIViews();
-
-        textView2.setText(result);
-        String str = textView2.getText().toString();
-        cutstr = str.split(" +");
-        textView.setText("");
-        for(int i=0; i<cutstr.length; i++){
-
-            part = cutstr[i];
-
-            switch (part){
-                case "R":   textView.setText(textView.getText().toString() + "R");   break;
-                case "U":   textView.setText(textView.getText().toString() + "U");   break;
-                case "L":   textView.setText(textView.getText().toString() + "L");   break;
-                case "D":   textView.setText(textView.getText().toString() + "D");   break;
-                case "F":   textView.setText(textView.getText().toString() + "F");   break;
-                case "B":   textView.setText(textView.getText().toString() + "B");   break;
-                case "R\'": textView.setText(textView.getText().toString() + "r");   break;
-                case "U\'": textView.setText(textView.getText().toString() + "u");   break;
-                case "L\'": textView.setText(textView.getText().toString() + "l");   break;
-                case "D\'": textView.setText(textView.getText().toString() + "d");   break;
-                case "F\'": textView.setText(textView.getText().toString() + "f");   break;
-                case "B\'": textView.setText(textView.getText().toString() + "b");   break;
-                case "R2":  textView.setText(textView.getText().toString() + "RR");  break;
-                case "U2":  textView.setText(textView.getText().toString() + "UU");  break;
-                case "L2":  textView.setText(textView.getText().toString() + "LL");  break;
-                case "D2":  textView.setText(textView.getText().toString() + "DD");  break;
-                case "F2":  textView.setText(textView.getText().toString() + "FF");  break;
-                case "B2":  textView.setText(textView.getText().toString() + "BB");  break;
-                default:    break;
-            }
-        }
-        textView.setText(textView.getText().toString() + "E");
-
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -86,33 +55,44 @@ public class MainActivity5 extends AppCompatActivity {
         //btDevice = btAdapter.getRemoteDevice(SERVICE_ADDRESS);
 
 
-         polacz.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 btDevice = btAdapter.getRemoteDevice(textView34.getText().toString());
-                 if(btAdapter == null) {
-                     Toast.makeText(getApplicationContext(), "Bluetooth not available", Toast.LENGTH_LONG).show();
-                 } else {
-                     if(!btAdapter.isEnabled()) {
-                         Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                         startActivityForResult(enableIntent, 3);
-                     }else {
-                         ConnectThread connectThread = new ConnectThread(btDevice);
-                         connectThread.start();
-                     }
-                 }
-             }
-         });
+        polacz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btDevice = btAdapter.getRemoteDevice(textView34.getText().toString());
+                if(btAdapter == null) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth not available", Toast.LENGTH_LONG).show();
+                } else {
+                    if(!btAdapter.isEnabled()) {
+                        Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(enableIntent, 3);
+                    }else {
+                        ConnectThread connectThread = new ConnectThread(btDevice);
+                        connectThread.start();
+                    }
+                }
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //------------------generowanie scrambla--------------------
+                textView.setText("");
+                for(int i=0; i<40; i++){
+                    int random = (int)(Math.random()*ruchy.length);
+                    part = ruchy[random];
+                    textView.setText(textView.getText().toString() + part);
+                    i++;
+                }
+                textView.setText(textView.getText().toString() + "E");
+                //--------------------------------------------------------------
+
                 if(btSocket != null) {
 
                     try{
                         OutputStream out = btSocket.getOutputStream();
                         out.write((textView.getText().toString() + "\r\n").getBytes());
-                        Toast.makeText(MainActivity5.this, "Wysłano", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(scramble.this, "Wysłano", Toast.LENGTH_SHORT).show();
                     }catch(IOException e) {
                         //Toast.makeText(MainActivity5.this, "Błąd wysyłania", Toast.LENGTH_LONG).show();
                     }
@@ -120,8 +100,53 @@ public class MainActivity5 extends AppCompatActivity {
                 }
             }
         });
-    }
 
+        solve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //-----------------------------generowanie rozwiązania dla scambla-------------
+                scrambStr = textView.getText().toString();
+                String rev = "";
+                char[] chars = scrambStr.toCharArray();
+                int len = chars.length;
+
+                for(int i = len-2; i>=0; i--){
+                    rev = rev + chars[i];
+                }
+                char[] reverse = rev.toCharArray();
+                rev="";
+                for(int i=0; i<reverse.length; i++){
+
+                    switch (reverse[i]){
+                        case 'R':   rev = rev + "r";   break;
+                        case 'U':   rev = rev + "u";   break;
+                        case 'L':   rev = rev + "l";   break;
+                        case 'D':   rev = rev + "d";   break;
+                        case 'F':   rev = rev + "f";   break;
+                        case 'B':   rev = rev + "b";   break;
+                        case 'E':   rev = rev + "E";   break;
+                        default:    break;
+                    }
+                }
+                textView.setText(rev + "E");
+                //------------------------------------------------------------------------
+
+                if(btSocket != null) {
+
+                    try{
+                        OutputStream out = btSocket.getOutputStream();
+                        out.write((textView.getText().toString() + "\r\n").getBytes());
+                        Toast.makeText(scramble.this, "Wysłano", Toast.LENGTH_SHORT).show();
+                    }catch(IOException e) {
+                        //Toast.makeText(MainActivity5.this, "Błąd wysyłania", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+        });
+
+    }
     int licznik = 0;
     private void implementListeners() {
 
@@ -177,7 +202,7 @@ public class MainActivity5 extends AppCompatActivity {
             }
             thisSocket = tmp;
 
-            Toast.makeText(MainActivity5.this, "Połączono", Toast.LENGTH_SHORT).show();
+            Toast.makeText(scramble.this, "Połączono", Toast.LENGTH_SHORT).show();
         }
 
         public void run() {
@@ -216,6 +241,6 @@ public class MainActivity5 extends AppCompatActivity {
         lista = (Button) findViewById(R.id.lista);
         polacz = (Button) findViewById(R.id.button15);
         listView = (ListView) findViewById(R.id.ListView);
+        solve = (Button) findViewById(R.id.button17);
     }
-
 }
