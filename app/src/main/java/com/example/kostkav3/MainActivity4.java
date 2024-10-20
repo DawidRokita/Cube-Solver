@@ -21,15 +21,6 @@ public class MainActivity4 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main4);
 
-        VideoView videoView = findViewById(R.id.Video_view);
-        String VideoPath = "android.resource://" + getPackageName() + "/" + R.raw.instrukcja2;
-        Uri uri = Uri.parse(VideoPath);
-        videoView.setVideoURI(uri);
-
-        MediaController mediaController = new MediaController(this);
-        videoView.setMediaController(mediaController);
-        mediaController.setAnchorView(videoView);
-
         setupUIViews();
         hidetext();
 

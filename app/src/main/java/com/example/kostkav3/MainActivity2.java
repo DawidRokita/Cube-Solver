@@ -45,7 +45,7 @@ public class MainActivity2 extends AppCompatActivity {
     String col1, col2, col3, col4, col5, col6, colr7, col8, col9, resultat;
     String result, scrambledCube;
     private EditText liczbaruchow, minproby;
-
+    public Button captureButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
 
-        Button captureButton = findViewById(R.id.capture_button);
+        captureButton = findViewById(R.id.capture_button);
 
         captureButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -472,6 +472,7 @@ public class MainActivity2 extends AppCompatActivity {
                 textView27.setVisibility(View.INVISIBLE);
                 minproby.setVisibility(View.INVISIBLE);
                 textView28.setVisibility(View.INVISIBLE);
+                captureButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -610,6 +611,7 @@ public class MainActivity2 extends AppCompatActivity {
                         textView27.setVisibility(View.VISIBLE);
                         minproby.setVisibility(View.VISIBLE);
                         textView28.setVisibility(View.VISIBLE);
+                        captureButton.setVisibility(View.GONE);
                         break;
                 }
 
@@ -625,6 +627,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
         result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
     }
+
 
 
 
@@ -659,6 +662,8 @@ public class MainActivity2 extends AppCompatActivity {
 
             // Odczytaj kolory
             readColorsFromBitmap(bitmap);
+
+            // wpisz kolory na panel
             c1.setText(colorTextViews[0][0].getText().toString());
             c2.setText(colorTextViews[0][1].getText().toString());
             c3.setText(colorTextViews[0][2].getText().toString());

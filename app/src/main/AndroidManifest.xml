@@ -24,8 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".scramble"></activity>
-        <activity android:name=".MainActivity6" />
+        <activity
+            android:name=".scramble"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".MainActivity6"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".MainActivity5"
             android:screenOrientation="portrait" />
