@@ -2,21 +2,29 @@ package com.example.kostkav3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.annotation.Nullable;
-
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.graphics.Color;
 import android.widget.Toast;
 
-import static android.widget.Toast.LENGTH_LONG;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -24,19 +32,26 @@ public class MainActivity2 extends AppCompatActivity {
     public static final String TEXT = "text";
     private String text;
 
-    int licznik = 0;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
+    private ImageView capturedImage;
+    private Bitmap bitmap;
+    private TextView[][] colorTextViews;
+
+    int licznik = 0, maxMoves = 21, minProbe = 5000;
     private Button white, red, green, orange, blue, yellow, divider, reset, lewo, prawo, dol, gora, solve, next, send;
     private Button c1, c2, c3, c4, c5, c6, c7, c8, c9, graphic;
-    private TextView textView2, textView3, textView4, textView5, textView23;
-    String col1, col2, col3, col4, col5, col6, colr7, col8, col9,resultat;
+    private TextView textView2, textView3, textView4, textView5, textView10, textView23, textView27, textView28;
+    String col1, col2, col3, col4, col5, col6, colr7, col8, col9, resultat;
     String result, scrambledCube;
-
+    private EditText liczbaruchow, minproby;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
 
         setupUIViews();
         choicecolor();
@@ -51,22 +66,68 @@ public class MainActivity2 extends AppCompatActivity {
         reset();
         nextbutton();
 
+
+        // Inicjalizacja TextView do wyświetlania kolorów
+        colorTextViews = new TextView[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int resId = getResources().getIdentifier("color_" + i + j, "id", getPackageName());
+                colorTextViews[i][j] = findViewById(resId);
+            }
+        }
+
+        Button captureButton = findViewById(R.id.capture_button);
+
+        captureButton.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+            } else {
+                dispatchTakePictureIntent();
+            }
+        });
+
+
         solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 scrambledCube = textView3.getText().toString();
-                simpleSolve(scrambledCube);
-                textView5.setText(result);
+
+                String maxMovesText = liczbaruchow.getText().toString();
+                String minProbeText = minproby.getText().toString();
+
+                minProbe = Integer.parseInt(minProbeText);
+                maxMoves = Integer.parseInt(maxMovesText);
+
+                long startTime = System.currentTimeMillis();    // Zapisanie czasu początkowego
+
+                simpleSolve(scrambledCube, maxMoves, minProbe);
+
+                long endTime = System.currentTimeMillis();  // Zapisanie czasu końcowego
+                long duration = endTime - startTime;     // roznica czasu - czas potrzebny do znalezienia rozwiazania
 
                 solve.setVisibility(View.INVISIBLE);
                 next.setVisibility(View.INVISIBLE);
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.VISIBLE);
 
+                textView10.setVisibility(View.INVISIBLE);
+                liczbaruchow.setVisibility(View.INVISIBLE);
+                textView27.setVisibility(View.INVISIBLE);
+                minproby.setVisibility(View.INVISIBLE);
+                textView28.setVisibility(View.INVISIBLE);
+
                 graphic.setVisibility(View.VISIBLE);
 
-                if(result == "Brak rozwiązania"){
-                    Toast.makeText(MainActivity2.this, "Żle wprowadzono układ kolorów na kostce", Toast.LENGTH_LONG).show();
+                if (!result.equals("Brak rozwiązania")) {
+                    result = result.replaceAll("\\s+", " ").trim();
+                    textView5.setText(result);
+                    String[] moves = result.trim().split(" ");
+                    int numberOfMoves = moves.length;
+                    Toast.makeText(MainActivity2.this, "Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity2.this, "Nie znaleziono rozwiązania", Toast.LENGTH_SHORT).show();
                 }
 
                 clearcube();
@@ -140,12 +201,19 @@ public class MainActivity2 extends AppCompatActivity {
         solve = (Button) findViewById(R.id.solve);
         graphic = (Button) findViewById(R.id.button12);
 
+        liczbaruchow = (EditText) findViewById(R.id.liczbaruchow);
+        minproby = (EditText) findViewById(R.id.minproby);
+
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
         textView4 = (TextView) findViewById(R.id.textView4);
         textView5 = (TextView) findViewById(R.id.textView5);
         textView23 = (TextView) findViewById(R.id.textView23);
+        textView10 = (TextView) findViewById(R.id.textView10);
+        textView27 = (TextView) findViewById(R.id.textView27);
+        textView28 = (TextView) findViewById(R.id.textView28);
 
+        capturedImage = findViewById(R.id.captured_image);
     }
 
     private void choicecolor(){
@@ -352,6 +420,13 @@ public class MainActivity2 extends AppCompatActivity {
 
         c9.setText("");
         c9.setBackgroundResource(R.color.black);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                colorTextViews[i][j].setText("");
+            }
+        }
+
     }
 
     private void reset(){
@@ -392,6 +467,11 @@ public class MainActivity2 extends AppCompatActivity {
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.INVISIBLE);
                 graphic.setVisibility(View.INVISIBLE);
+                textView10.setVisibility(View.INVISIBLE);
+                liczbaruchow.setVisibility(View.INVISIBLE);
+                textView27.setVisibility(View.INVISIBLE);
+                minproby.setVisibility(View.INVISIBLE);
+                textView28.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -434,6 +514,7 @@ public class MainActivity2 extends AppCompatActivity {
                             btn.setTextColor(0xFFFFEA00);
                             break;
                     }
+
             }
         });
     }
@@ -446,7 +527,7 @@ public class MainActivity2 extends AppCompatActivity {
                 licznik++;
                 textcube();
 
-                resultat = col1 + col2  + col3+ col4+ col5 + col6 + colr7 + col8 + col9;
+                resultat = col1 + col2 + col3 + col4 + col5 + col6 + colr7 + col8 + col9;
 
                 textView3.setText(textView3.getText().toString() + resultat);
 
@@ -524,17 +605,272 @@ public class MainActivity2 extends AppCompatActivity {
                         next.setVisibility(View.INVISIBLE);
                         reset.setVisibility(View.INVISIBLE);
                         send.setVisibility(View.INVISIBLE);
+                        textView10.setVisibility(View.VISIBLE);
+                        liczbaruchow.setVisibility(View.VISIBLE);
+                        textView27.setVisibility(View.VISIBLE);
+                        minproby.setVisibility(View.VISIBLE);
+                        textView28.setVisibility(View.VISIBLE);
                         break;
                 }
-
-
 
             }
         });
     }
 
-    public void simpleSolve(String scrambledCube) {
-        result = new Search().solution(scrambledCube, 21, 100000000, 0, 0);
+
+
+
+
+
+    public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
+        result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
     }
+
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+            } else {
+                Toast.makeText(this, "Brak uprawnień do używania aparatu", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            bitmap = (Bitmap) extras.get("data");
+            capturedImage.setImageBitmap(bitmap);
+
+            // Odczytaj kolory
+            readColorsFromBitmap(bitmap);
+            c1.setText(colorTextViews[0][0].getText().toString());
+            c2.setText(colorTextViews[0][1].getText().toString());
+            c3.setText(colorTextViews[0][2].getText().toString());
+
+            c4.setText(colorTextViews[1][0].getText().toString());
+            c6.setText(colorTextViews[1][2].getText().toString());
+
+            c7.setText(colorTextViews[2][0].getText().toString());
+            c8.setText(colorTextViews[2][1].getText().toString());
+            c9.setText(colorTextViews[2][2].getText().toString());
+
+
+
+            switch (c1.getText().toString()){
+                case "U":   c1.setTextColor(0xFFB8BBB9);    c1.setBackgroundResource(R.color.white);   break;
+                case "R":   c1.setTextColor(0xFFE60A0A);    c1.setBackgroundResource(R.color.red);   break;
+                case "F":   c1.setTextColor(0xFF76FF03);    c1.setBackgroundResource(R.color.green);   break;
+                case "L":   c1.setTextColor(0xFFFF9100);    c1.setBackgroundResource(R.color.orange);       break;
+                case "B":   c1.setTextColor(0xFF00B0FF);    c1.setBackgroundResource(R.color.blue);   break;
+                case "D":   c1.setTextColor(0xFFFFEA00);    c1.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c2.getText().toString()){
+                case "U":   c2.setTextColor(0xFFB8BBB9);    c2.setBackgroundResource(R.color.white);   break;
+                case "R":   c2.setTextColor(0xFFE60A0A);    c2.setBackgroundResource(R.color.red);   break;
+                case "F":   c2.setTextColor(0xFF76FF03);    c2.setBackgroundResource(R.color.green);   break;
+                case "L":   c2.setTextColor(0xFFFF9100);    c2.setBackgroundResource(R.color.orange);       break;
+                case "B":   c2.setTextColor(0xFF00B0FF);    c2.setBackgroundResource(R.color.blue);   break;
+                case "D":   c2.setTextColor(0xFFFFEA00);    c2.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c3.getText().toString()){
+                case "U":   c3.setTextColor(0xFFB8BBB9);    c3.setBackgroundResource(R.color.white);   break;
+                case "R":   c3.setTextColor(0xFFE60A0A);    c3.setBackgroundResource(R.color.red);   break;
+                case "F":   c3.setTextColor(0xFF76FF03);    c3.setBackgroundResource(R.color.green);   break;
+                case "L":   c3.setTextColor(0xFFFF9100);    c3.setBackgroundResource(R.color.orange);       break;
+                case "B":   c3.setTextColor(0xFF00B0FF);    c3.setBackgroundResource(R.color.blue);   break;
+                case "D":   c3.setTextColor(0xFFFFEA00);    c3.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c4.getText().toString()){
+                case "U":   c4.setTextColor(0xFFB8BBB9);    c4.setBackgroundResource(R.color.white);   break;
+                case "R":   c4.setTextColor(0xFFE60A0A);    c4.setBackgroundResource(R.color.red);   break;
+                case "F":   c4.setTextColor(0xFF76FF03);    c4.setBackgroundResource(R.color.green);   break;
+                case "L":   c4.setTextColor(0xFFFF9100);    c4.setBackgroundResource(R.color.orange);       break;
+                case "B":   c4.setTextColor(0xFF00B0FF);    c4.setBackgroundResource(R.color.blue);   break;
+                case "D":   c4.setTextColor(0xFFFFEA00);    c4.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c6.getText().toString()){
+                case "U":   c6.setTextColor(0xFFB8BBB9);    c6.setBackgroundResource(R.color.white);   break;
+                case "R":   c6.setTextColor(0xFFE60A0A);    c6.setBackgroundResource(R.color.red);   break;
+                case "F":   c6.setTextColor(0xFF76FF03);    c6.setBackgroundResource(R.color.green);   break;
+                case "L":   c6.setTextColor(0xFFFF9100);    c6.setBackgroundResource(R.color.orange);       break;
+                case "B":   c6.setTextColor(0xFF00B0FF);    c6.setBackgroundResource(R.color.blue);   break;
+                case "D":   c6.setTextColor(0xFFFFEA00);    c6.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c7.getText().toString()){
+                case "U":   c7.setTextColor(0xFFB8BBB9);    c7.setBackgroundResource(R.color.white);   break;
+                case "R":   c7.setTextColor(0xFFE60A0A);    c7.setBackgroundResource(R.color.red);   break;
+                case "F":   c7.setTextColor(0xFF76FF03);    c7.setBackgroundResource(R.color.green);   break;
+                case "L":   c7.setTextColor(0xFFFF9100);    c7.setBackgroundResource(R.color.orange);       break;
+                case "B":   c7.setTextColor(0xFF00B0FF);    c7.setBackgroundResource(R.color.blue);   break;
+                case "D":   c7.setTextColor(0xFFFFEA00);    c7.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c8.getText().toString()){
+                case "U":   c8.setTextColor(0xFFB8BBB9);    c8.setBackgroundResource(R.color.white);   break;
+                case "R":   c8.setTextColor(0xFFE60A0A);    c8.setBackgroundResource(R.color.red);   break;
+                case "F":   c8.setTextColor(0xFF76FF03);    c8.setBackgroundResource(R.color.green);   break;
+                case "L":   c8.setTextColor(0xFFFF9100);    c8.setBackgroundResource(R.color.orange);       break;
+                case "B":   c8.setTextColor(0xFF00B0FF);    c8.setBackgroundResource(R.color.blue);   break;
+                case "D":   c8.setTextColor(0xFFFFEA00);    c8.setBackgroundResource(R.color.yellow);   break;
+            }
+
+            switch (c9.getText().toString()){
+                case "U":   c9.setTextColor(0xFFB8BBB9);    c9.setBackgroundResource(R.color.white);   break;
+                case "R":   c9.setTextColor(0xFFE60A0A);    c9.setBackgroundResource(R.color.red);   break;
+                case "F":   c9.setTextColor(0xFF76FF03);    c9.setBackgroundResource(R.color.green);   break;
+                case "L":   c9.setTextColor(0xFFFF9100);    c9.setBackgroundResource(R.color.orange);       break;
+                case "B":   c9.setTextColor(0xFF00B0FF);    c9.setBackgroundResource(R.color.blue);   break;
+                case "D":   c9.setTextColor(0xFFFFEA00);    c9.setBackgroundResource(R.color.yellow);   break;
+            }
+
+        }
+    }
+
+    private void readColorsFromBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            Toast.makeText(this, "Bitmap is null!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int width = bitmap.getWidth() / 3;
+        int height = bitmap.getHeight() / 3;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                // Oblicz średnią wartość koloru dla danego pola
+                int pixelColor = getAverageColor(bitmap, j * width, i * height, width, height);
+                String colorName = getColorName(pixelColor);
+                colorTextViews[i][j].setText(colorName); // Uaktualnienie TextView
+
+                Log.d("ColorInfo", "Kolor w polu (" + i + ", " + j + "): " + colorName);
+            }
+        }
+    }
+
+    private int getAverageColor(Bitmap bitmap, int startX, int startY, int width, int height) {
+        int r = 0, g = 0, b = 0;
+        int count = 0;
+
+        // Próbkuj piksele w obszarze centralnym pola (np. 5x5 pikseli)
+        for (int x = startX + width / 4; x < startX + 3 * width / 4; x++) {
+            for (int y = startY + height / 4; y < startY + 3 * height / 4; y++) {
+                int pixel = bitmap.getPixel(x, y);
+                r += Color.red(pixel);
+                g += Color.green(pixel);
+                b += Color.blue(pixel);
+                count++;
+            }
+        }
+
+        // Oblicz średnie wartości RGB
+        r /= count;
+        g /= count;
+        b /= count;
+
+        return Color.rgb(r, g, b);
+    }
+
+    private String getColorName(int pixelColor) {
+        // Zdefiniowane kolory RGB
+        final int[][] color = {
+                {255, 0, 0},     // Czerwony
+                {0, 255, 0},     // Zielony
+                {0, 0, 255},     // Niebieski
+                {255, 165, 0},   // Pomarańczowy
+                {255, 255, 255}, // Biały
+                {255, 255, 0}    // Żółty
+        };
+
+        int r = Color.red(pixelColor);
+        int g = Color.green(pixelColor);
+        int b = Color.blue(pixelColor);
+
+        int[] error = new int[6];
+        int minIndex = 0;
+
+        // Obliczanie błędu dla każdego koloru
+        for (int k = 0; k < 6; k++) {
+            error[k] = Math.abs(color[k][0] - r) + Math.abs(color[k][1] - g) + Math.abs(color[k][2] - b);
+            if (k > 0 && error[k] < error[minIndex]) {
+                minIndex = k;
+            }
+        }
+
+        // Filtry, aby rozróżnić kolory
+        // Rozróżnienie między czerwonym a pomarańczowym
+        if (minIndex == 0 || minIndex == 3) { // Czerwony lub Pomarańczowy
+            if (b > g) {
+                minIndex = 0; // Czerwony
+            } else {
+                minIndex = 3; // Pomarańczowy
+            }
+        }
+        // Rozróżnienie między pomarańczowym a żółtym
+        if (minIndex == 3 || minIndex == 5) { // Pomarańczowy lub Żółty
+            if (g < 200) {  //170
+                minIndex = 3; // Pomarańczowy
+            } else {
+                minIndex = 5; // Żółty
+            }
+        }
+        // Rozróżnienie między zielonym a niebieskim
+        if (minIndex == 1 || minIndex == 2) { // Zielony lub Niebieski
+            if (g > b) {
+                minIndex = 1; // Zielony
+            } else {
+                minIndex = 2; // Niebieski
+            }
+        }
+        // Rozróżnienie między czerwonym a niebieskim
+        if (minIndex == 0 || minIndex == 2) { // Czerwony lub Niebieski
+            if (r > b) {
+                minIndex = 0; // Czerwony
+            } else {
+                minIndex = 2; // Niebieski
+            }
+        }
+        // Rozróżnienie między białym a niebieskim
+        if (minIndex == 4 && r < 120) { // Biały i r < 120
+            minIndex = 2; // Ustaw jako Niebieski
+        }
+        // Rozróżnienie między białym a żółtym
+        if (minIndex == 4 && b < 190) { // Biały i b < 200
+            minIndex = 5; // Ustaw jako Żółty
+        }
+
+        // Przypisanie nazw kolorów
+        switch (minIndex) {
+            case 0: return "R";
+            case 1: return "F";
+            case 2: return "B";
+            case 3: return "L";
+            case 4: return "U";
+            case 5: return "D";
+            default: return "Nieznany kolor";
+        }
+    }
+
+
 
 }
