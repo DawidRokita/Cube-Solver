@@ -22,7 +22,6 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -38,10 +37,10 @@ public class MainActivity2 extends AppCompatActivity {
     private Bitmap bitmap;
     private TextView[][] colorTextViews;
 
-    int licznik = 0, maxMoves = 21, minProbe = 5000;
+    int licznik = 0, maxMoves = 21, minProbe = 5000, count_click = 1;
     private Button white, red, green, orange, blue, yellow, divider, reset, lewo, prawo, dol, gora, solve, next, send;
     private Button c1, c2, c3, c4, c5, c6, c7, c8, c9, graphic;
-    private TextView textView2, textView3, textView4, textView5, textView10, textView23, textView27, textView28;
+    private TextView textView2, textView3, textView4, textView5, textView10, textView27, textView28;
     String col1, col2, col3, col4, col5, col6, colr7, col8, col9, resultat;
     String result, scrambledCube;
     private EditText liczbaruchow, minproby;
@@ -51,7 +50,6 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
 
         setupUIViews();
         choicecolor();
@@ -66,8 +64,6 @@ public class MainActivity2 extends AppCompatActivity {
         reset();
         nextbutton();
 
-
-        // Inicjalizacja TextView do wyświetlania kolorów
         colorTextViews = new TextView[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -88,10 +84,12 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-
         solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                solve.setVisibility(View.INVISIBLE);
+
                 scrambledCube = textView3.getText().toString();
 
                 String maxMovesText = liczbaruchow.getText().toString();
@@ -107,8 +105,6 @@ public class MainActivity2 extends AppCompatActivity {
                 long endTime = System.currentTimeMillis();  // Zapisanie czasu końcowego
                 long duration = endTime - startTime;     // roznica czasu - czas potrzebny do znalezienia rozwiazania
 
-                solve.setVisibility(View.INVISIBLE);
-                next.setVisibility(View.INVISIBLE);
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.VISIBLE);
 
@@ -153,25 +149,42 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
+        textView28.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(count_click == 1){
+                    textView10.setVisibility(View.VISIBLE);
+                    liczbaruchow.setVisibility(View.VISIBLE);
+                    textView27.setVisibility(View.VISIBLE);
+                    minproby.setVisibility(View.VISIBLE);
+                    textView28.setText("Parametry algorytmu ▼");
+                    count_click = 0;
+                }else{
+                    textView10.setVisibility(View.INVISIBLE);
+                    liczbaruchow.setVisibility(View.INVISIBLE);
+                    textView27.setVisibility(View.INVISIBLE);
+                    minproby.setVisibility(View.INVISIBLE);
+                    textView28.setText("Parametry algorytmu ▶");
+                    count_click = 1;
+                }
+
+            }
+        });
 
         loadData();
-
     }
 
     public void saveData() {
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(TEXT, textView5.getText().toString());
-            editor.apply();
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TEXT, textView5.getText().toString());
+        editor.apply();
     }
 
     public void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         text = sharedPreferences.getString(TEXT, "");
-    }
-
-    public void updateViews(){
-        textView5.setText(text);
     }
 
     private void setupUIViews(){
@@ -208,7 +221,6 @@ public class MainActivity2 extends AppCompatActivity {
         textView3 = (TextView) findViewById(R.id.textView3);
         textView4 = (TextView) findViewById(R.id.textView4);
         textView5 = (TextView) findViewById(R.id.textView5);
-        textView23 = (TextView) findViewById(R.id.textView23);
         textView10 = (TextView) findViewById(R.id.textView10);
         textView27 = (TextView) findViewById(R.id.textView27);
         textView28 = (TextView) findViewById(R.id.textView28);
@@ -467,10 +479,10 @@ public class MainActivity2 extends AppCompatActivity {
                 reset.setVisibility(View.VISIBLE);
                 send.setVisibility(View.INVISIBLE);
                 graphic.setVisibility(View.INVISIBLE);
-                textView10.setVisibility(View.INVISIBLE);
-                liczbaruchow.setVisibility(View.INVISIBLE);
-                textView27.setVisibility(View.INVISIBLE);
-                minproby.setVisibility(View.INVISIBLE);
+//                textView10.setVisibility(View.INVISIBLE);
+//                liczbaruchow.setVisibility(View.INVISIBLE);
+//                textView27.setVisibility(View.INVISIBLE);
+//                minproby.setVisibility(View.INVISIBLE);
                 textView28.setVisibility(View.INVISIBLE);
                 captureButton.setVisibility(View.VISIBLE);
             }
@@ -483,39 +495,38 @@ public class MainActivity2 extends AppCompatActivity {
 
             public void onClick(View v) {
 
-                    switch (textView2.getText().toString()) {
-                        case "white":
-                            btn.setBackgroundResource(R.color.white);
-                            btn.setText("U");
-                            btn.setTextColor(0xFFB8BBB9);
-                            break;
-                        case "red":
-                            btn.setBackgroundResource(R.color.red);
-                            btn.setText("R");
-                            btn.setTextColor(0xFFE60A0A);
-                            break;
-                        case "green":
-                            btn.setBackgroundResource(R.color.green);
-                            btn.setText("F");
-                            btn.setTextColor(0xFF76FF03);
-                            break;
-                        case "orange":
-                            btn.setBackgroundResource(R.color.orange);
-                            btn.setText("L");
-                            btn.setTextColor(0xFFFF9100);
-                            break;
-                        case "blue":
-                            btn.setBackgroundResource(R.color.blue);
-                            btn.setText("B");
-                            btn.setTextColor(0xFF00B0FF);
-                            break;
-                        case "yellow":
-                            btn.setBackgroundResource(R.color.yellow);
-                            btn.setText("D");
-                            btn.setTextColor(0xFFFFEA00);
-                            break;
-                    }
-
+                switch (textView2.getText().toString()) {
+                    case "white":
+                        btn.setBackgroundResource(R.color.white);
+                        btn.setText("U");
+                        btn.setTextColor(0xFFB8BBB9);
+                        break;
+                    case "red":
+                        btn.setBackgroundResource(R.color.red);
+                        btn.setText("R");
+                        btn.setTextColor(0xFFE60A0A);
+                        break;
+                    case "green":
+                        btn.setBackgroundResource(R.color.green);
+                        btn.setText("F");
+                        btn.setTextColor(0xFF76FF03);
+                        break;
+                    case "orange":
+                        btn.setBackgroundResource(R.color.orange);
+                        btn.setText("L");
+                        btn.setTextColor(0xFFFF9100);
+                        break;
+                    case "blue":
+                        btn.setBackgroundResource(R.color.blue);
+                        btn.setText("B");
+                        btn.setTextColor(0xFF00B0FF);
+                        break;
+                    case "yellow":
+                        btn.setBackgroundResource(R.color.yellow);
+                        btn.setText("D");
+                        btn.setTextColor(0xFFFFEA00);
+                        break;
+                }
             }
         });
     }
@@ -606,10 +617,10 @@ public class MainActivity2 extends AppCompatActivity {
                         next.setVisibility(View.INVISIBLE);
                         reset.setVisibility(View.INVISIBLE);
                         send.setVisibility(View.INVISIBLE);
-                        textView10.setVisibility(View.VISIBLE);
-                        liczbaruchow.setVisibility(View.VISIBLE);
-                        textView27.setVisibility(View.VISIBLE);
-                        minproby.setVisibility(View.VISIBLE);
+//                        textView10.setVisibility(View.VISIBLE);
+//                        liczbaruchow.setVisibility(View.VISIBLE);
+//                        textView27.setVisibility(View.VISIBLE);
+//                        minproby.setVisibility(View.VISIBLE);
                         textView28.setVisibility(View.VISIBLE);
                         captureButton.setVisibility(View.GONE);
                         break;
@@ -618,20 +629,6 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
-
-    public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
-        result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
-    }
-
-
-
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -876,6 +873,8 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-
+    public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
+        result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
+    }
 
 }
