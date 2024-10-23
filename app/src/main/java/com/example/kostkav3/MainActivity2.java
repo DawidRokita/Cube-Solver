@@ -123,9 +123,7 @@ public class MainActivity2 extends AppCompatActivity {
                     String[] moves = result.trim().split(" ");
                     int numberOfMoves = moves.length;
                     showToast("Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, 5000);
-//                    Toast.makeText(MainActivity2.this, "Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, Toast.LENGTH_LONG).show();
                 } else {
-//                    Toast.makeText(MainActivity2.this, "Nie znaleziono rozwiązania", Toast.LENGTH_SHORT).show();
                     showToast("Nie znaleziono rozwiązania",2000);
                 }
 
