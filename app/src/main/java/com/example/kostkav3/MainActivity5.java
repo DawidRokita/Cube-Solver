@@ -230,7 +230,7 @@ public class MainActivity5 extends AppCompatActivity {
                                 String receivedHexData = bytesToHex(buffer);    // konwersja odebranych bajtow do stringa hex
                                 int receivedDecimalData = Integer.parseInt(receivedHexData, 16);    // konwersja hex do dec
                                 czas_sekundy = receivedDecimalData/305.175781;  //zmiana odebranej liczby pulsow z robota na sekundy
-
+                                czas_sekundy = czas_sekundy/100;
                                 // zmiana obliczonego czasu na stinga z czasen z dokladnoscia do dwuch cyfr po pzecinku
                                 String timeInSeconds = String.format("%.2f", czas_sekundy);
                                 czas_tb.setText(timeInSeconds + " s");  // wyswietl czas w textView
