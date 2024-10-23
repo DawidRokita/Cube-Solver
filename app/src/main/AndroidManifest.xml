@@ -8,14 +8,11 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-
     <uses-permission android:name="android.permission.CAMERA"
         tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Keep only one declaration -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,32 +21,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".scramble"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".MainActivity6"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".MainActivity5"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".MainActivity4"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".MainActivity3"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".MainActivity2"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true"> <!-- Add android:exported attribute -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
