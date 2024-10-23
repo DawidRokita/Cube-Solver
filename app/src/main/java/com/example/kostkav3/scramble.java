@@ -3,6 +3,7 @@ package com.example.kostkav3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,9 +35,7 @@ public class scramble extends AppCompatActivity {
     public BluetoothSocket btSocket;
     private String[] ruchy = {"R", "L", "U", "D", "F", "B"};
 
-
-    public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID //nie trzeba zmieniac
-    //public static final String SERVICE_ADDRESS = "00:19:10:08:C3:22"; // HC-05 BT ADDRESS TUTAJ JEST ADRES HC-05 D.R.1
+    public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID
     String[] strings;
 
     @Override
@@ -50,22 +49,17 @@ public class scramble extends AppCompatActivity {
 
         implementListeners();
 
-
-
-        //btDevice = btAdapter.getRemoteDevice(SERVICE_ADDRESS);
-
-
         polacz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btDevice = btAdapter.getRemoteDevice(textView34.getText().toString());
-                if(btAdapter == null) {
-                    Toast.makeText(getApplicationContext(), "Bluetooth not available", Toast.LENGTH_LONG).show();
+                if (btAdapter == null) {
+                    showToast("bluetooth nie dostępny", 1000);
                 } else {
-                    if(!btAdapter.isEnabled()) {
+                    if (!btAdapter.isEnabled()) {
                         Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                         startActivityForResult(enableIntent, 3);
-                    }else {
+                    } else {
                         ConnectThread connectThread = new ConnectThread(btDevice);
                         connectThread.start();
                     }
@@ -76,27 +70,23 @@ public class scramble extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //------------------generowanie scrambla--------------------
                 textView.setText("");
-                for(int i=0; i<40; i++){
-                    int random = (int)(Math.random()*ruchy.length);
+                for (int i = 0; i < 40; i++) {
+                    int random = (int) (Math.random() * ruchy.length);
                     part = ruchy[random];
                     textView.setText(textView.getText().toString() + part);
                     i++;
                 }
                 textView.setText(textView.getText().toString() + "E");
-                //--------------------------------------------------------------
 
-                if(btSocket != null) {
-
-                    try{
+                if (btSocket != null) {
+                    try {
                         OutputStream out = btSocket.getOutputStream();
                         out.write((textView.getText().toString() + "\r\n").getBytes());
-                        Toast.makeText(scramble.this, "Wysłano", Toast.LENGTH_SHORT).show();
-                    }catch(IOException e) {
-                        //Toast.makeText(MainActivity5.this, "Błąd wysyłania", Toast.LENGTH_LONG).show();
+                        showToast("Wysłano", 1000);
+                    } catch (IOException e) {
+                        // Handle the exception
                     }
-
                 }
             }
         });
@@ -104,75 +94,101 @@ public class scramble extends AppCompatActivity {
         solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //-----------------------------generowanie rozwiązania dla scambla-------------
                 scrambStr = textView.getText().toString();
                 String rev = "";
                 char[] chars = scrambStr.toCharArray();
                 int len = chars.length;
 
-                for(int i = len-2; i>=0; i--){
+                for (int i = len - 2; i >= 0; i--) {
                     rev = rev + chars[i];
                 }
                 char[] reverse = rev.toCharArray();
-                rev="";
-                for(int i=0; i<reverse.length; i++){
-
-                    switch (reverse[i]){
-                        case 'R':   rev = rev + "r";   break;
-                        case 'U':   rev = rev + "u";   break;
-                        case 'L':   rev = rev + "l";   break;
-                        case 'D':   rev = rev + "d";   break;
-                        case 'F':   rev = rev + "f";   break;
-                        case 'B':   rev = rev + "b";   break;
-                        case 'E':   rev = rev + "E";   break;
-                        default:    break;
+                rev = "";
+                for (int i = 0; i < reverse.length; i++) {
+                    switch (reverse[i]) {
+                        case 'R':
+                            rev = rev + "r";
+                            break;
+                        case 'U':
+                            rev = rev + "u";
+                            break;
+                        case 'L':
+                            rev = rev + "l";
+                            break;
+                        case 'D':
+                            rev = rev + "d";
+                            break;
+                        case 'F':
+                            rev = rev + "f";
+                            break;
+                        case 'B':
+                            rev = rev + "b";
+                            break;
+                        case 'E':
+                            rev = rev + "E";
+                            break;
+                        default:
+                            break;
                     }
                 }
                 textView.setText(rev + "E");
-                //------------------------------------------------------------------------
 
-                if(btSocket != null) {
-
-                    try{
+                if (btSocket != null) {
+                    try {
                         OutputStream out = btSocket.getOutputStream();
                         out.write((textView.getText().toString() + "\r\n").getBytes());
-                        Toast.makeText(scramble.this, "Wysłano", Toast.LENGTH_SHORT).show();
-                    }catch(IOException e) {
-                        //Toast.makeText(MainActivity5.this, "Błąd wysyłania", Toast.LENGTH_LONG).show();
+                        showToast("Wysłano", 1000);
+                    } catch (IOException e) {
+                        // Handle the exception
                     }
-
                 }
-
             }
         });
-
     }
-    int licznik = 0;
-    private void implementListeners() {
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disconnectBluetooth(); // Disconnect when the activity is destroyed
+    }
+
+    private void disconnectBluetooth() {
+        if (btSocket != null) {
+            try {
+                btSocket.close();
+                btSocket = null;
+                showToast("Rozłączono", 1000);
+            } catch (IOException e) {
+                Log.e("TEST", "Can't close socket");
+            }
+        }
+    }
+
+    int licznik = 0;
+
+    private void implementListeners() {
         lista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(licznik==0){
+                if (licznik == 0) {
                     listView.setVisibility(View.VISIBLE);
-                    licznik=1;
-                }else{
+                    licznik = 1;
+                } else {
                     listView.setVisibility(View.INVISIBLE);
-                    licznik=0;
+                    licznik = 0;
                 }
 
-                Set<BluetoothDevice> bt= btAdapter.getBondedDevices();
+                Set<BluetoothDevice> bt = btAdapter.getBondedDevices();
                 strings = new String[bt.size()];
                 int index = 0;
 
-                if(bt.size()>0){
-                    for(BluetoothDevice device : bt){
+                if (bt.size() > 0) {
+                    for (BluetoothDevice device : bt) {
                         strings[index] = device.getName() + "/" + device.getAddress();
                         index++;
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_selectable_list_item, strings);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_selectable_list_item, strings);
                     listView.setAdapter(arrayAdapter);
-
                 }
             }
         });
@@ -196,13 +212,10 @@ public class scramble extends AppCompatActivity {
             thisDevice = device;
             try {
                 tmp = thisDevice.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_ID));
-
             } catch (IOException e) {
-                Log.e("TEST", "Can't connect to service");
+                Log.e("TEST", "Can't create socket");
             }
             thisSocket = tmp;
-
-            Toast.makeText(scramble.this, "Połączono", Toast.LENGTH_SHORT).show();
         }
 
         public void run() {
@@ -211,7 +224,15 @@ public class scramble extends AppCompatActivity {
 
             try {
                 thisSocket.connect();
-                Log.d("TESTING", "Connected to shit");
+                Log.d("TESTING", "Connected to Bluetooth device");
+
+                // Show the "Połączono" message after successful connection
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("Połączono", 1000);
+                    }
+                });
             } catch (IOException connectException) {
                 try {
                     thisSocket.close();
@@ -222,8 +243,8 @@ public class scramble extends AppCompatActivity {
             }
 
             btSocket = thisSocket;
-
         }
+
         public void cancel() {
             try {
                 thisSocket.close();
@@ -233,14 +254,28 @@ public class scramble extends AppCompatActivity {
         }
     }
 
-    private void setupUIViews(){
-        textView = (TextView) findViewById(R.id.textView6);
-        textView2 = (TextView) findViewById(R.id.textView31);
-        textView34 = (TextView) findViewById(R.id.textView32);
-        button = (Button) findViewById(R.id.button13);
-        lista = (Button) findViewById(R.id.lista);
-        polacz = (Button) findViewById(R.id.button15);
-        listView = (ListView) findViewById(R.id.ListView);
-        solve = (Button) findViewById(R.id.button17);
+    private void setupUIViews() {
+        textView = findViewById(R.id.textView6);
+        textView2 = findViewById(R.id.textView31);
+        textView34 = findViewById(R.id.textView32);
+        button = findViewById(R.id.button13);
+        lista = findViewById(R.id.lista);
+        polacz = findViewById(R.id.button15);
+        listView = findViewById(R.id.ListView);
+        solve = findViewById(R.id.button17);
+    }
+
+
+    private void showToast(String message, int duration) {
+        final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+
+        // Ustawienie opóźnienia, aby zamknąć toast po zadanym czasie
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel(); // Zamknij toast
+            }
+        }, duration);
     }
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,9 +122,11 @@ public class MainActivity2 extends AppCompatActivity {
                     textView5.setText(result);
                     String[] moves = result.trim().split(" ");
                     int numberOfMoves = moves.length;
-                    Toast.makeText(MainActivity2.this, "Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, Toast.LENGTH_LONG).show();
+                    showToast("Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, 5000);
+//                    Toast.makeText(MainActivity2.this, "Znaleziono rozwiązanie w czasie: " + duration + " ms\nLiczba ruchów: " + numberOfMoves, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(MainActivity2.this, "Nie znaleziono rozwiązania", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity2.this, "Nie znaleziono rozwiązania", Toast.LENGTH_SHORT).show();
+                    showToast("Nie znaleziono rozwiązania",2000);
                 }
 
                 clearcube();
@@ -636,8 +639,8 @@ public class MainActivity2 extends AppCompatActivity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent();
-            } else {
-                Toast.makeText(this, "Brak uprawnień do używania aparatu", Toast.LENGTH_SHORT).show();
+            } else {;
+                showToast("Brak uprawnień do używania aparatu",3000);
             }
         }
     }
@@ -751,7 +754,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void readColorsFromBitmap(Bitmap bitmap) {
         if (bitmap == null) {
-            Toast.makeText(this, "Bitmap is null!", Toast.LENGTH_SHORT).show();
+            showToast("Pusta bitmapa!",3000);
             return;
         }
 
@@ -875,6 +878,19 @@ public class MainActivity2 extends AppCompatActivity {
 
     public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
         result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
+    }
+
+    private void showToast(String message, int duration) {
+        final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+
+        // Ustawienie opóźnienia, aby zamknąć toast po zadanym czasie
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel(); // Zamknij toast
+            }
+        }, duration);
     }
 
 }

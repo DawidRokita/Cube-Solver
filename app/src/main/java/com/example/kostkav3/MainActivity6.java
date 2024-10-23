@@ -21,7 +21,7 @@ public class MainActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main6);
 
-        Toast.makeText(MainActivity6.this, "Kostkę trzymaj tak aby środkowy kolor górnej ściany był biały a przedniej zielony", Toast.LENGTH_LONG).show();
+        showToast("Kostkę trzymaj tak aby środkowy kolor górnej ściany był biały a przedniej zielony", 5000);
 
         setupUIViews();
 
@@ -55,7 +55,7 @@ public class MainActivity6 extends AppCompatActivity {
                     case "D2":      tabbtn[i].setBackgroundResource(R.drawable.ruchdd);       tabbtn[i].setVisibility(View.VISIBLE);   break;
                     case "F2":      tabbtn[i].setBackgroundResource(R.drawable.ruchff);       tabbtn[i].setVisibility(View.VISIBLE);   break;
                     case "B2":      tabbtn[i].setBackgroundResource(R.drawable.ruchbb);       tabbtn[i].setVisibility(View.VISIBLE);   break;
-                    default:        Toast.makeText(MainActivity6.this, "Nie ma rozwiązania dla tego układu kostki", Toast.LENGTH_LONG).show();     break;
+                    default:        showToast("Nie ma rozwiązania dla tego układu kostki", 3000);     break;
                 }
             }
         }
@@ -88,6 +88,19 @@ public class MainActivity6 extends AppCompatActivity {
         pole22 = (Button) findViewById(R.id.pole22);
         pole23 = (Button) findViewById(R.id.pole23);
         pole24 = (Button) findViewById(R.id.pole24);
+    }
+
+    private void showToast(String message, int duration) {
+        final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+
+        // Ustawienie opóźnienia, aby zamknąć toast po zadanym czasie
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel(); // Zamknij toast
+            }
+        }, duration);
     }
 
 }
