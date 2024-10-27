@@ -19,24 +19,24 @@ import android.content.Intent;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 
 public class scramble extends AppCompatActivity {
 
-    private String part, scrambStr;
+    private String part, scrambStr, prevpart;
     private String[] cutstr;
     public Button button, lista, polacz, solve;
-    private TextView textView, textView2, textView34;
+    private TextView textView, textView2, textView34, textView9;
     public ListView listView;
     public BluetoothAdapter btAdapter;
     public BluetoothDevice btDevice;
     public BluetoothSocket btSocket;
-    private String[] ruchy = {"R", "L", "U", "D", "F", "B"};
+    private String[] ruchy = {"R", "L", "U", "D", "F", "B", "R\'", "L\'", "U\'", "D\'", "F\'", "B\'"};
 
     public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID
     String[] strings;
+    String scrambledCube, result, scramble = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +71,82 @@ public class scramble extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textView.setText("");
+
+                prevpart = "";
+                scramble = "";
                 for (int i = 0; i < 40; i++) {
                     int random = (int) (Math.random() * ruchy.length);
                     part = ruchy[random];
-                    textView.setText(textView.getText().toString() + part);
+
+                    if(part == prevpart){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "R" && prevpart == "R\'") || (part == "R\'" && prevpart == "R")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "L" && prevpart == "L\'") || (part == "L\'" && prevpart == "L")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "U" && prevpart == "U\'") || (part == "U\'" && prevpart == "U")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "D" && prevpart == "D\'") || (part == "D\'" && prevpart == "D")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "F" && prevpart == "F\'") || (part == "F\'" && prevpart == "F")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+                    if((part == "B" && prevpart == "B\'") || (part == "B\'" && prevpart == "B")){
+                        random = (int) (Math.random() * ruchy.length);
+                        part = ruchy[random];
+                    }
+
+                    prevpart = part;
+
+                    if(i == 39){
+                        scramble = scramble + part;
+                    }else{
+                        scramble = scramble + part + " ";
+                    }
+
                     i++;
                 }
+
+                textView9.setText(scramble);
+
+                cutstr = scramble.split(" +");
+                textView.setText("");
+                for(int j=0; j<cutstr.length; j++){
+                    part = cutstr[j];
+                    switch (part){
+                        case "R":   textView.setText(textView.getText().toString() + "R");   break;
+                        case "U":   textView.setText(textView.getText().toString() + "U");   break;
+                        case "L":   textView.setText(textView.getText().toString() + "L");   break;
+                        case "D":   textView.setText(textView.getText().toString() + "D");   break;
+                        case "F":   textView.setText(textView.getText().toString() + "F");   break;
+                        case "B":   textView.setText(textView.getText().toString() + "B");   break;
+                        case "R\'": textView.setText(textView.getText().toString() + "r");   break;
+                        case "U\'": textView.setText(textView.getText().toString() + "u");   break;
+                        case "L\'": textView.setText(textView.getText().toString() + "l");   break;
+                        case "D\'": textView.setText(textView.getText().toString() + "d");   break;
+                        case "F\'": textView.setText(textView.getText().toString() + "f");   break;
+                        case "B\'": textView.setText(textView.getText().toString() + "b");   break;
+                        case "R2":  textView.setText(textView.getText().toString() + "RR");  break;
+                        case "U2":  textView.setText(textView.getText().toString() + "UU");  break;
+                        case "L2":  textView.setText(textView.getText().toString() + "LL");  break;
+                        case "D2":  textView.setText(textView.getText().toString() + "DD");  break;
+                        case "F2":  textView.setText(textView.getText().toString() + "FF");  break;
+                        case "B2":  textView.setText(textView.getText().toString() + "BB");  break;
+                        default:    break;
+                    }
+                }
+
                 textView.setText(textView.getText().toString() + "E");
 
                 if (btSocket != null) {
@@ -99,39 +169,39 @@ public class scramble extends AppCompatActivity {
                 char[] chars = scrambStr.toCharArray();
                 int len = chars.length;
 
-                for (int i = len - 2; i >= 0; i--) {
-                    rev = rev + chars[i];
-                }
-                char[] reverse = rev.toCharArray();
-                rev = "";
-                for (int i = 0; i < reverse.length; i++) {
-                    switch (reverse[i]) {
-                        case 'R':
-                            rev = rev + "r";
-                            break;
-                        case 'U':
-                            rev = rev + "u";
-                            break;
-                        case 'L':
-                            rev = rev + "l";
-                            break;
-                        case 'D':
-                            rev = rev + "d";
-                            break;
-                        case 'F':
-                            rev = rev + "f";
-                            break;
-                        case 'B':
-                            rev = rev + "b";
-                            break;
-                        case 'E':
-                            rev = rev + "E";
-                            break;
-                        default:
-                            break;
+                textView9.setText("");
+                getScrambledCube(scramble);
+                simpleSolve(scrambledCube, 21, 500);
+                textView9.setText(result);
+
+                cutstr = result.split(" +");
+                textView.setText("");
+                for(int j=0; j<cutstr.length; j++){
+                    part = cutstr[j];
+                    switch (part){
+                        case "R":   textView.setText(textView.getText().toString() + "R");   break;
+                        case "U":   textView.setText(textView.getText().toString() + "U");   break;
+                        case "L":   textView.setText(textView.getText().toString() + "L");   break;
+                        case "D":   textView.setText(textView.getText().toString() + "D");   break;
+                        case "F":   textView.setText(textView.getText().toString() + "F");   break;
+                        case "B":   textView.setText(textView.getText().toString() + "B");   break;
+                        case "R\'": textView.setText(textView.getText().toString() + "r");   break;
+                        case "U\'": textView.setText(textView.getText().toString() + "u");   break;
+                        case "L\'": textView.setText(textView.getText().toString() + "l");   break;
+                        case "D\'": textView.setText(textView.getText().toString() + "d");   break;
+                        case "F\'": textView.setText(textView.getText().toString() + "f");   break;
+                        case "B\'": textView.setText(textView.getText().toString() + "b");   break;
+                        case "R2":  textView.setText(textView.getText().toString() + "RR");  break;
+                        case "U2":  textView.setText(textView.getText().toString() + "UU");  break;
+                        case "L2":  textView.setText(textView.getText().toString() + "LL");  break;
+                        case "D2":  textView.setText(textView.getText().toString() + "DD");  break;
+                        case "F2":  textView.setText(textView.getText().toString() + "FF");  break;
+                        case "B2":  textView.setText(textView.getText().toString() + "BB");  break;
+                        default:    break;
                     }
                 }
-                textView.setText(rev + "E");
+
+                textView.setText(textView.getText().toString() + "E");
 
                 if (btSocket != null) {
                     try {
@@ -139,7 +209,7 @@ public class scramble extends AppCompatActivity {
                         out.write((textView.getText().toString() + "\r\n").getBytes());
                         showToast("Wysłano", 1000);
                     } catch (IOException e) {
-                        // Handle the exception
+                        showToast("Błąd wysłania", 1000);
                     }
                 }
             }
@@ -149,7 +219,7 @@ public class scramble extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disconnectBluetooth(); // Disconnect when the activity is destroyed
+        disconnectBluetooth(); // rozłącz z bluetooth po wyjściu
     }
 
     private void disconnectBluetooth() {
@@ -159,7 +229,7 @@ public class scramble extends AppCompatActivity {
                 btSocket = null;
                 showToast("Rozłączono", 1000);
             } catch (IOException e) {
-                Log.e("TEST", "Can't close socket");
+                Log.e("TEST", "Nie da się rozłączyć");
             }
         }
     }
@@ -263,6 +333,7 @@ public class scramble extends AppCompatActivity {
         polacz = findViewById(R.id.button15);
         listView = findViewById(R.id.ListView);
         solve = findViewById(R.id.button17);
+        textView9 = findViewById(R.id.textView9);
     }
 
 
@@ -278,4 +349,15 @@ public class scramble extends AppCompatActivity {
             }
         }, duration);
     }
+
+    public void getScrambledCube(String scramble) {
+        scrambledCube = Tools.fromScramble(scramble);
+    }
+
+    public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
+        result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
+    }
+
+
+
 }

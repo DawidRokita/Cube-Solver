@@ -878,6 +878,8 @@ public class MainActivity2 extends AppCompatActivity {
         result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
     }
 
+
+
     private void showToast(String message, int duration) {
         final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.show();
