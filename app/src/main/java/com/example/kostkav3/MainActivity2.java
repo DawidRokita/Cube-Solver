@@ -804,17 +804,17 @@ public class MainActivity2 extends AppCompatActivity {
         float value = hsv[2];
 
         // Przypisanie kolorów na podstawie zakresów HSV
-        if (value > 0.5 && saturation < 0.2) {
+        if (value > 0.45 && saturation < 0.3) {
             return "U"; // Wysoka jasność i niskie nasycenie sugeruje biały
         } else if (hue >= 40 && hue < 70) {
             return "D";
         } else if (hue >= 70 && hue < 165) {
             return "F";
-        } else if (hue < 5 || hue >= 300) {
+        } else if (hue < 7 || hue >= 300) {
             return "R";
         } else if (hue >= 165 && hue < 300) {
             return "B";
-        } else if (hue >= 5 && hue < 70) {
+        } else if (hue >= 7 && hue < 70) {
             return "L";
         } else {
             return "U";
