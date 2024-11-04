@@ -27,7 +27,7 @@ public class scramble extends AppCompatActivity {
     private String part, scrambStr, prevpart;
     private String[] cutstr;
     public Button button, lista, polacz, solve;
-    private TextView textView, textView2, textView34, textView9;
+    private TextView textView, textView34, textView9;
     public ListView listView;
     public BluetoothAdapter btAdapter;
     public BluetoothDevice btDevice;
@@ -78,10 +78,13 @@ public class scramble extends AppCompatActivity {
                     int random = (int) (Math.random() * ruchy.length);
                     part = ruchy[random];
 
-                    if(part == prevpart){
+
+                    if(part == prevpart){   //nie wybieraj dwa razy pod rząd tego samego ruchu
                         random = (int) (Math.random() * ruchy.length);
                         part = ruchy[random];
                     }
+
+                    //nie cofaj poprzedniego ruchu (jeśli jest ruch R to kolejny nie może być R')
                     if((part == "R" && prevpart == "R\'") || (part == "R\'" && prevpart == "R")){
                         random = (int) (Math.random() * ruchy.length);
                         part = ruchy[random];
@@ -109,7 +112,7 @@ public class scramble extends AppCompatActivity {
 
                     prevpart = part;
 
-                    if(i == 39){
+                    if(i == 39){ //do ostatniego ruchu nie dodawaj spacji
                         scramble = scramble + part;
                     }else{
                         scramble = scramble + part + " ";
@@ -326,7 +329,6 @@ public class scramble extends AppCompatActivity {
 
     private void setupUIViews() {
         textView = findViewById(R.id.textView6);
-        textView2 = findViewById(R.id.textView31);
         textView34 = findViewById(R.id.textView32);
         button = findViewById(R.id.button13);
         lista = findViewById(R.id.lista);

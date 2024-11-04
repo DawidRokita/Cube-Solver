@@ -795,82 +795,29 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private String getColorName(int pixelColor) {
-        // Zdefiniowane kolory RGB
-        final int[][] color = {
-                {255, 0, 0},     // Czerwony
-                {0, 255, 0},     // Zielony
-                {0, 0, 255},     // Niebieski
-                {255, 165, 0},   // Pomarańczowy
-                {255, 255, 255}, // Biały
-                {255, 255, 0}    // Żółty
-        };
 
-        int r = Color.red(pixelColor);
-        int g = Color.green(pixelColor);
-        int b = Color.blue(pixelColor);
+        float[] hsv = new float[3];
+        Color.colorToHSV(pixelColor, hsv);
 
-        int[] error = new int[6];
-        int minIndex = 0;
+        float hue = hsv[0];
+        float saturation = hsv[1];
+        float value = hsv[2];
 
-        // Obliczanie błędu dla każdego koloru
-        for (int k = 0; k < 6; k++) {
-            error[k] = Math.abs(color[k][0] - r) + Math.abs(color[k][1] - g) + Math.abs(color[k][2] - b);
-            if (k > 0 && error[k] < error[minIndex]) {
-                minIndex = k;
-            }
-        }
-
-        // Filtry, aby rozróżnić kolory
-        // Rozróżnienie między czerwonym a pomarańczowym
-        if (minIndex == 0 || minIndex == 3) { // Czerwony lub Pomarańczowy
-            if (b > g) {
-                minIndex = 0; // Czerwony
-            } else {
-                minIndex = 3; // Pomarańczowy
-            }
-        }
-        // Rozróżnienie między pomarańczowym a żółtym
-        if (minIndex == 3 || minIndex == 5) { // Pomarańczowy lub Żółty
-            if (g < 200) {  //170
-                minIndex = 3; // Pomarańczowy
-            } else {
-                minIndex = 5; // Żółty
-            }
-        }
-        // Rozróżnienie między zielonym a niebieskim
-        if (minIndex == 1 || minIndex == 2) { // Zielony lub Niebieski
-            if (g > b) {
-                minIndex = 1; // Zielony
-            } else {
-                minIndex = 2; // Niebieski
-            }
-        }
-        // Rozróżnienie między czerwonym a niebieskim
-        if (minIndex == 0 || minIndex == 2) { // Czerwony lub Niebieski
-            if (r > b) {
-                minIndex = 0; // Czerwony
-            } else {
-                minIndex = 2; // Niebieski
-            }
-        }
-        // Rozróżnienie między białym a niebieskim
-        if (minIndex == 4 && r < 120) { // Biały i r < 120
-            minIndex = 2; // Ustaw jako Niebieski
-        }
-        // Rozróżnienie między białym a żółtym
-        if (minIndex == 4 && b < 190) { // Biały i b < 200
-            minIndex = 5; // Ustaw jako Żółty
-        }
-
-        // Przypisanie nazw kolorów
-        switch (minIndex) {
-            case 0: return "R";
-            case 1: return "F";
-            case 2: return "B";
-            case 3: return "L";
-            case 4: return "U";
-            case 5: return "D";
-            default: return "Nieznany kolor";
+        // Przypisanie kolorów na podstawie zakresów HSV
+        if (value > 0.5 && saturation < 0.2) {
+            return "U"; // Wysoka jasność i niskie nasycenie sugeruje biały
+        } else if (hue >= 40 && hue < 70) {
+            return "D";
+        } else if (hue >= 70 && hue < 165) {
+            return "F";
+        } else if (hue < 5 || hue >= 300) {
+            return "R";
+        } else if (hue >= 165 && hue < 300) {
+            return "B";
+        } else if (hue >= 5 && hue < 70) {
+            return "L";
+        } else {
+            return "U";
         }
     }
 
