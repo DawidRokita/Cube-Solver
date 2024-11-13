@@ -752,72 +752,72 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void readColorsFromBitmap(Bitmap bitmap) {
         if (bitmap == null) {
-            showToast("Pusta bitmapa!",3000);
+            showToast("Pusta bitmapa!", 3000);
             return;
         }
 
         int width = bitmap.getWidth() / 3;
         int height = bitmap.getHeight() / 3;
 
+        int margin = 5;
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                // Oblicz średnią wartość koloru dla danego pola
-                int pixelColor = getAverageColor(bitmap, j * width, i * height, width, height);
-                String colorName = getColorName(pixelColor);
-                colorTextViews[i][j].setText(colorName); // Uaktualnienie TextView
+                // Wyznacz granice centralnego obszaru na podstawie marginesu
+                int startX = j * width + margin;
+                int endX = (j + 1) * width - margin;
+                int startY = i * height + margin;
+                int endY = (i + 1) * height - margin;
 
+                // Oblicz średnie wartości RGB w centralnym obszarze pola
+                int r = 0, g = 0, b = 0;
+                int count = 0;
+                for (int x = startX; x < endX; x++) {
+                    for (int y = startY; y < endY; y++) {
+                        int pixel = bitmap.getPixel(x, y);
+                        r += Color.red(pixel);
+                        g += Color.green(pixel);
+                        b += Color.blue(pixel);
+                        count++;
+                    }
+                }
+
+                // Oblicz średni kolor
+                int averageColor = Color.rgb(r / count, g / count, b / count);
+                String colorName = getColorName(averageColor);
+
+                // Wyświetl nazwę koloru w odpowiednim polu TextView
+                colorTextViews[i][j].setText(colorName);
                 Log.d("ColorInfo", "Kolor w polu (" + i + ", " + j + "): " + colorName);
             }
         }
     }
 
-    private int getAverageColor(Bitmap bitmap, int startX, int startY, int width, int height) {
-        int r = 0, g = 0, b = 0;
-        int count = 0;
-
-        // Próbkuj piksele w obszarze centralnym pola (np. 5x5 pikseli)
-        for (int x = startX + width / 4; x < startX + 3 * width / 4; x++) {
-            for (int y = startY + height / 4; y < startY + 3 * height / 4; y++) {
-                int pixel = bitmap.getPixel(x, y);
-                r += Color.red(pixel);
-                g += Color.green(pixel);
-                b += Color.blue(pixel);
-                count++;
-            }
-        }
-
-        // Oblicz średnie wartości RGB
-        r /= count;
-        g /= count;
-        b /= count;
-
-        return Color.rgb(r, g, b);
-    }
 
     private String getColorName(int pixelColor) {
 
         float[] hsv = new float[3];
         Color.colorToHSV(pixelColor, hsv);
 
-        float hue = hsv[0];
-        float saturation = hsv[1];
-        float value = hsv[2];
+        float hue = hsv[0]; //kolor 0-360
+        float saturation = hsv[1];  //nasycenie
+        float value = hsv[2];   //jasność
 
         // Przypisanie kolorów na podstawie zakresów HSV
         if (value > 0.45 && saturation < 0.3) {
             return "U"; // Wysoka jasność i niskie nasycenie sugeruje biały
         } else if (hue >= 40 && hue < 70) {
-            return "D";
+            return "D"; //żółty
         } else if (hue >= 70 && hue < 165) {
-            return "F";
+            return "F"; //zielony
         } else if (hue < 7 || hue >= 300) {
-            return "R";
+            return "R"; //czerwony
         } else if (hue >= 165 && hue < 300) {
-            return "B";
-        } else if (hue >= 7 && hue < 70) {
-            return "L";
+            return "B"; //niebieski
+        } else if (hue >= 7 && hue < 40) {
+            return "L"; //pomarańczowy
         } else {
-            return "U";
+        return "!";
         }
     }
 
