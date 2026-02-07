@@ -22,10 +22,7 @@ The app allows users to input the cube state manually or via camera, choose diff
 ## 🧠 Implemented Solving Algorithms
 
 ### 🔹 Two-Phase Algorithm (Kociemba)
-Used as a fast and reliable general solver.
-
-- Input: cube state as a 54-character facelet string  
-- Output: optimal or near-optimal solution (≤ 21 moves)
+A Rubik’s Cube solving method that finds short solutions (usually 20–21 moves) by first reducing the cube to a restricted subgroup and then solving it completely in a second phase.
 
 ### 🔹 LBL (Layer By Layer)
 Classic beginner-friendly method:
@@ -48,11 +45,11 @@ Advanced speedcubing method:
 This project **uses and adapts algorithms from the following open-source repositories**:
 
 ### 🔗 Two-Phase Algorithm
-Based on Herbert Kociemba’s algorithm and its Java implementations:
+Based on Herbert Kociemba’s algorithm and its optimised Java implementation:
 - https://github.com/cs0x7f/min2phase
 
 ### 🔗 LBL Solver
-Inspired by educational and open-source LBL implementations:
+Adapted from a Java LBL implementation:
 - https://github.com/puddles31/rubiks-solver
 
 ### 🔗 CFOP Solver
