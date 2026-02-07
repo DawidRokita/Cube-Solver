@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#212225"
     android:scrollbarAlwaysDrawVerticalTrack="true"
-    tools:context=".MainActivity2">
+    tools:context=".MainActivity2"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/linearLayout"

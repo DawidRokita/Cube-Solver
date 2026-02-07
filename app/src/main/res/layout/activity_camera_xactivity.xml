@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212225"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <!-- KWADRATOWY PODGLĄD -->
+
+    <Button
+        android:id="@+id/cam_up"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="360dp"
+        android:layout_height="360dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cam_up" />
+
+    <Button
+        android:id="@+id/cam_down"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previewView" />
+
+    <Button
+        android:id="@+id/btnCapture"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/photo"
+        android:textColor="#BEBEBE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cam_down" />
+
+    <Button
+        android:id="@+id/cam_left"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/previewView"
+        app:layout_constraintEnd_toStartOf="@+id/previewView"
+        app:layout_constraintTop_toBottomOf="@+id/cam_up" />
+
+    <Button
+        android:id="@+id/cam_right"
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/previewView"
+        app:layout_constraintStart_toEndOf="@+id/previewView"
+        app:layout_constraintTop_toBottomOf="@+id/cam_up" />
+
+    <Button
+        android:id="@+id/cam_c5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/cam_down"
+        app:layout_constraintEnd_toEndOf="@+id/previewView"
+        app:layout_constraintStart_toStartOf="@+id/previewView"
+        app:layout_constraintTop_toTopOf="@+id/previewView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

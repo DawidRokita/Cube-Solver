@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#212225"
     android:fadingEdge="vertical"
-    tools:context=".MainActivity5">
+    tools:context=".MainActivity5"
+    android:fitsSystemWindows="true">
 
     <TextView
         android:id="@+id/textView6"
