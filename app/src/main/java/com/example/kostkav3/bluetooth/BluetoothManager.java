@@ -1,8 +1,10 @@
-package com.example.kostkav3;
+package com.example.kostkav3.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
+import com.example.kostkav3.ui.MainActivity5;
 
 import java.io.IOException;
 import java.io.InputStream;

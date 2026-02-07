@@ -20,29 +20,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CameraXActivity"
+        <activity android:name=".ui.CameraXActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".scramble"
+            android:name=".ui.scramble"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity6"
+            android:name=".ui.MainActivity6"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity5"
+            android:name=".ui.MainActivity5"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity4"
+            android:name=".ui.MainActivity4"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity3"
+            android:name=".ui.MainActivity3"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity2"
+            android:name=".ui.MainActivity2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"> <!-- Add android:exported attribute -->
             <intent-filter>

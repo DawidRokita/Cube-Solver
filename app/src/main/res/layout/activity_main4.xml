@@ -7,7 +7,7 @@
     android:background="#212225"
     android:scrollbarAlwaysDrawHorizontalTrack="true"
     android:scrollbarAlwaysDrawVerticalTrack="true"
-    tools:context=".MainActivity4"
+    tools:context=".ui.MainActivity4"
     android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
