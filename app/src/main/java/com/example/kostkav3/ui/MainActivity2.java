@@ -961,9 +961,11 @@ public class MainActivity2 extends AppCompatActivity {
                 result = MoveNormalizer.normalize(result);
             }
         } else if(selectedAlgorithm == 3) { //CFOP
-            result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);  //twophase
+            result = com.example.kostkav3.solver.cfop.CfopSolver.getSolutionReportFromFacelets(scrambledCube);
+            Log.d("CFOP", result);
+            result = com.example.kostkav3.solver.cfop.CfopSolver.extractMovesFromReport(result);
         }else if(selectedAlgorithm == 4) { //inny
-            result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);  //twophase
+            Toast.makeText(this, "jeszcze nie zaimplementowany", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "Nie wybrano algorytmu", Toast.LENGTH_SHORT).show();
         }

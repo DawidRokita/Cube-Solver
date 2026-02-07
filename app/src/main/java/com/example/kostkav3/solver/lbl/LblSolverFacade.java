@@ -4,12 +4,6 @@ import java.util.ArrayList;
 
 public class LblSolverFacade {
 
-    /**
-     * Wejście: 54 znaki w kolejności URFDLB (UUU...RRR...FFF...DDD...LLL...BBB...)
-     * Znaki: U,R,F,D,L,B (Twoje oznaczenia)
-     *
-     * Wyjście: sekwencja ruchów np. "F R U' ..."
-     */
     public static String solveFromURFDLB(String state) {
         if (state == null || state.length() != 54) {
             throw new IllegalArgumentException("Stan musi mieć dokładnie 54 znaki.");

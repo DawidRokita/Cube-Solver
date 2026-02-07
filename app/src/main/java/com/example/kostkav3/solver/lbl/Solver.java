@@ -665,13 +665,3 @@ public class Solver {
         return new ArrayList<>(cube.getMoveHistory());
     }
 }
-
-/*
- Todo:
-    - Replace all 'slice' turns with equivalent face turn sequences (slice turns aren't technically allowed)
-    - Create a list of all moves made, return the size of list at end
-    - Check for duplicate/undoing moves that can be simplified
-        - e.g. U and U' cancel each other out
-        - e.g. F and F2 is equivalent to F'
-    - General code tidying
-*/
