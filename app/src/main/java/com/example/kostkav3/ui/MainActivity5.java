@@ -1,9 +1,19 @@
 package com.example.kostkav3.ui;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -11,9 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 
 import com.example.kostkav3.R;
 import com.example.kostkav3.bluetooth.BluetoothManager;
@@ -25,15 +32,22 @@ public class MainActivity5 extends AppCompatActivity {
 
     private String part;
     private String[] cutstr;
+
     public Button button, lista, polacz;
     private TextView textView, textView2, textView34;
-    public static TextView czas_tb;  // To jest globalny TextView, zaktualizowany przez BluetoothManager
+    public static TextView czas_tb; // aktualizowany przez BluetoothManager
     public ListView listView;
-    public BluetoothAdapter btAdapter;
 
+    public BluetoothAdapter btAdapter;
     public String[] strings;
 
     public static final String SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb"; //SPP UUID
+
+    int licznik = 0;
+
+    // ===== Android 12+ Bluetooth runtime perms =====
+    private ActivityResultLauncher<String[]> btPermsLauncher;
+    private Runnable pendingBtAction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +55,17 @@ public class MainActivity5 extends AppCompatActivity {
         setContentView(R.layout.activity_main5);
 
         String result = getIntent().getExtras().getString("message_key");
+
         setupUIViews();
 
+        // zamiana ruchów na format dla robota
         textView2.setText(result);
         String str = textView2.getText().toString();
         cutstr = str.split(" +");
         textView.setText("");
-        for(int i=0; i<cutstr.length; i++){
+        for (int i = 0; i < cutstr.length; i++) {
             part = cutstr[i];
-            switch (part){
+            switch (part) {
                 case "R":   textView.setText(textView.getText().toString() + "R");   break;
                 case "U":   textView.setText(textView.getText().toString() + "U");   break;
                 case "L":   textView.setText(textView.getText().toString() + "L");   break;
@@ -68,93 +84,154 @@ public class MainActivity5 extends AppCompatActivity {
                 case "D2":  textView.setText(textView.getText().toString() + "DD");  break;
                 case "F2":  textView.setText(textView.getText().toString() + "FF");  break;
                 case "B2":  textView.setText(textView.getText().toString() + "BB");  break;
-                default:    break;
+                default: break;
             }
         }
-
         textView.setText(textView.getText().toString() + "E");
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        btPermsLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                resultMap -> {
+                    boolean connectOk = Boolean.TRUE.equals(resultMap.get(Manifest.permission.BLUETOOTH_CONNECT));
+                    boolean scanOk = Boolean.TRUE.equals(resultMap.get(Manifest.permission.BLUETOOTH_SCAN));
+
+                    if (connectOk && scanOk) {
+                        if (pendingBtAction != null) pendingBtAction.run();
+                    } else {
+                        showToast("Brak uprawnień Bluetooth (CONNECT/SCAN)", 2500);
+                    }
+                    pendingBtAction = null;
+                }
+        );
+
         implementListeners();
 
-        polacz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        polacz.setOnClickListener(v -> {
+            Runnable action = () -> {
                 listView.setVisibility(View.INVISIBLE);
-                licznik = 0; // Resetuj licznik
+                licznik = 0;
 
-                BluetoothDevice btDevice = btAdapter.getRemoteDevice(textView34.getText().toString());
-                if(btAdapter == null) {
-                    showToast("bluetooth nie dostępny", 1000);
-                } else {
-                    if(!btAdapter.isEnabled()) {
-                        Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        startActivityForResult(enableIntent, 3);
-                    }else {
-                        try {
-                            BluetoothManager.getInstance().connect(btDevice);
-                            showToast("Połączono", 1000);
-                        } catch (IOException e) {
-                            showToast("Nie połączono", 1000);
-                        }
-                    }
+                if (btAdapter == null) {
+                    showToast("Bluetooth nie dostępny", 1200);
+                    return;
                 }
+
+                if (!btAdapter.isEnabled()) {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableIntent, 3);
+                    return;
+                }
+
+                String addr = textView34.getText().toString().trim();
+                if (addr.isEmpty()) {
+                    showToast("Wybierz urządzenie z listy", 1500);
+                    return;
+                }
+
+                BluetoothDevice btDevice = btAdapter.getRemoteDevice(addr);
+
+                try {
+                    BluetoothManager.getInstance().connect(btDevice);
+                    showToast("Połączono", 1000);
+                } catch (IOException e) {
+                    showToast("Nie połączono", 1200);
+                }
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (!ensureBtConnectAndScan(action)) return;
             }
+            action.run();
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        button.setOnClickListener(v -> {
+            Runnable action = () -> {
                 try {
                     BluetoothManager.getInstance().sendMessage(textView.getText().toString());
                     showToast("Wysłano", 1000);
                 } catch (IOException e) {
-                    showToast("Nie wysłano", 1000);
+                    showToast("Nie wysłano", 1200);
                 }
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (!ensureBtConnectAndScan(action)) return;
             }
+            action.run();
         });
     }
 
-    int licznik = 0;
     private void implementListeners() {
-        lista.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(licznik == 0){
+        lista.setOnClickListener(v -> {
+            Runnable action = () -> {
+                if (licznik == 0) {
                     listView.setVisibility(View.VISIBLE);
                     licznik = 1;
-                }else{
+                } else {
                     listView.setVisibility(View.INVISIBLE);
                     licznik = 0;
                 }
 
-                Set<BluetoothDevice> bt = btAdapter.getBondedDevices();
+                if (btAdapter == null) {
+                    showToast("Bluetooth nie dostępny", 1200);
+                    return;
+                }
+
+                Set<BluetoothDevice> bt = btAdapter.getBondedDevices(); // wymaga CONNECT na Android 12+
                 strings = new String[bt.size()];
                 int index = 0;
 
-                if(bt.size() > 0){
-                    for(BluetoothDevice device : bt){
-                        strings[index] = device.getName() + "/" + device.getAddress();
+                if (bt.size() > 0) {
+                    for (BluetoothDevice device : bt) {
+                        String name = device.getName();
+                        String addr = device.getAddress();
+                        strings[index] = (name == null ? "Unknown" : name) + "/" + addr;
                         index++;
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_selectable_list_item, strings);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                            getApplicationContext(),
+                            android.R.layout.simple_selectable_list_item,
+                            strings
+                    );
                     listView.setAdapter(arrayAdapter);
+                } else {
+                    showToast("Brak sparowanych urządzeń", 1500);
                 }
+            };
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (!ensureBtConnectAndScan(action)) return;
             }
+            action.run();
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String temp = strings[position].toString();
-                String[] parts = temp.split("/");
-                textView34.setText(parts[1]);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String temp = strings[position];
+            String[] parts = temp.split("/");
+            textView34.setText(parts[1]);
         });
     }
 
-    private void setupUIViews(){
+    // ===== Android 12+ permission helper =====
+    private boolean ensureBtConnectAndScan(Runnable actionIfGranted) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true;
+
+        boolean connectGranted = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+        boolean scanGranted = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED;
+
+        if (connectGranted && scanGranted) return true;
+
+        pendingBtAction = actionIfGranted;
+        btPermsLauncher.launch(new String[]{
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN
+        });
+        return false;
+    }
+
+    private void setupUIViews() {
         textView = findViewById(R.id.textView6);
         textView2 = findViewById(R.id.textView31);
         textView34 = findViewById(R.id.textView32);
@@ -165,18 +242,9 @@ public class MainActivity5 extends AppCompatActivity {
         listView = findViewById(R.id.ListView);
     }
 
-
     private void showToast(String message, int duration) {
         final Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.show();
-
-        // Ustawienie opóźnienia, aby zamknąć toast po zadanym czasie
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toast.cancel(); // Zamknij toast
-            }
-        }, duration);
+        new Handler().postDelayed(toast::cancel, duration);
     }
-
 }
