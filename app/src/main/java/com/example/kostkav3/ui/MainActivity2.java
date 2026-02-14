@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
     int licznik = 0, maxMoves = 21, minProbe = 5000, count_click = 1;
     private Button white, red, green, orange, blue, yellow, divider, reset, lewo, prawo, dol, gora, solve, next, send;
     private Button c1, c2, c3, c4, c5, c6, c7, c8, c9, graphic;
-    private Button btnSelectTwoPhase, btnLBL, btnCFOP, button20;
+    private Button btnSelectTwoPhase, btnLBL, btnCFOP, btnKORF, btnThistle;
     private TextView textView2, textView3, textView4, textView5, textView10, textView27, textView28;
     private CheckBox checkBoxNormalizeLBL;
     private TextView textNormalizeLBL, textParametryLBL;
@@ -154,73 +153,107 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-
         solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                // zablokuj przycisk od razu (żeby nie odpalić 2 razy)
+                solve.setEnabled(false);
                 solve.setVisibility(View.INVISIBLE);
 
                 scrambledCube = textView3.getText().toString();
 
-                String maxMovesText = liczbaruchow.getText().toString();
-                String minProbeText = minproby.getText().toString();
+                String maxMovesText = liczbaruchow.getText().toString().trim();
+                String minProbeText = minproby.getText().toString().trim();
 
-                minProbe = Integer.parseInt(minProbeText);
-                maxMoves = Integer.parseInt(maxMovesText);
-
-                long startTime = System.currentTimeMillis();
-
-                simpleSolve(scrambledCube, maxMoves, minProbe);
-
-                long endTime = System.currentTimeMillis();
-                long duration = endTime - startTime;
-
-                reset.setVisibility(View.VISIBLE);
-                send.setVisibility(View.VISIBLE);
-
-                textView10.setVisibility(View.INVISIBLE);
-                liczbaruchow.setVisibility(View.INVISIBLE);
-                textView27.setVisibility(View.INVISIBLE);
-                minproby.setVisibility(View.INVISIBLE);
-                textView28.setVisibility(View.INVISIBLE);
-
-                btnSelectTwoPhase.setVisibility(View.INVISIBLE);
-                btnLBL.setVisibility(View.INVISIBLE);
-                btnCFOP.setVisibility(View.INVISIBLE);
-                button20.setVisibility(View.INVISIBLE);
-
-                textParametryLBL.setVisibility(View.INVISIBLE);
-                textNormalizeLBL.setVisibility(View.INVISIBLE);
-                checkBoxNormalizeLBL.setVisibility(View.INVISIBLE);
-
-                btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
-                btnLBL.setBackgroundResource(R.drawable.button2_background);
-                button20.setBackgroundResource(R.drawable.button2_background);
-                btnCFOP.setBackgroundResource(R.drawable.button2_background);
-
-                graphic.setVisibility(View.VISIBLE);
-
-                if (!result.equals("Brak rozwiązania")) {
-                    result = result.replaceAll("\\s+", " ").trim();
-                    textView5.setText(result);
-
-                    int numberOfMoves = result.split(" ").length;
-
-                    showSolutionToast(
-                            "Znaleziono rozwiązanie\n"
-                                    + "Czas: " + duration + " ms\n"
-                                    + "Liczba ruchów: " + numberOfMoves,
-                            5000
-                    );
-                } else {
-                    showSolutionToast("Nie znaleziono rozwiązania", 2000);
+                // bezpieczne parsowanie
+                int localMaxMoves = 21;
+                int localMinProbe = 5000;
+                try {
+                    if (!maxMovesText.isEmpty()) localMaxMoves = Integer.parseInt(maxMovesText);
+                    if (!minProbeText.isEmpty()) localMinProbe = Integer.parseInt(minProbeText);
+                } catch (NumberFormatException e) {
+                    // wrócimy na UI i pokażemy info
+                    solve.setEnabled(true);
+                    solve.setVisibility(View.VISIBLE);
+                    showSolutionToast("Błędne parametry (maxMoves / minProbe)", 2500);
+                    return;
                 }
 
-                clearcube();
-                saveData();
+                maxMoves = localMaxMoves;
+                minProbe = localMinProbe;
+
+                new Thread(() -> {
+                    long startTime = System.currentTimeMillis();
+
+                    // --- LICZENIE W TLE ---
+                    // to ustawia pole "result"
+                    simpleSolve(scrambledCube, maxMoves, minProbe);
+
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    // --- UI UPDATE NA MAIN THREAD ---
+                    runOnUiThread(() -> {
+
+                        reset.setVisibility(View.VISIBLE);
+                        send.setVisibility(View.VISIBLE);
+
+                        textView10.setVisibility(View.INVISIBLE);
+                        liczbaruchow.setVisibility(View.INVISIBLE);
+                        textView27.setVisibility(View.INVISIBLE);
+                        minproby.setVisibility(View.INVISIBLE);
+                        textView28.setVisibility(View.INVISIBLE);
+
+                        btnSelectTwoPhase.setVisibility(View.INVISIBLE);
+                        btnLBL.setVisibility(View.INVISIBLE);
+                        btnCFOP.setVisibility(View.INVISIBLE);
+                        btnKORF.setVisibility(View.INVISIBLE);
+                        btnThistle.setVisibility(View.INVISIBLE);
+
+
+                        textParametryLBL.setVisibility(View.INVISIBLE);
+                        textNormalizeLBL.setVisibility(View.INVISIBLE);
+                        checkBoxNormalizeLBL.setVisibility(View.INVISIBLE);
+
+                        btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
+                        btnLBL.setBackgroundResource(R.drawable.button2_background);
+                        btnKORF.setBackgroundResource(R.drawable.button2_background);
+                        btnCFOP.setBackgroundResource(R.drawable.button2_background);
+                        btnThistle.setBackgroundResource(R.drawable.button2_background);
+
+
+                        graphic.setVisibility(View.VISIBLE);
+
+                        if (result != null && !result.equals("Brak rozwiązania") && !result.startsWith("Błąd")) {
+                            result = result.replaceAll("\\s+", " ").trim();
+                            textView5.setText(result);
+
+                            int numberOfMoves = result.isEmpty() ? 0 : result.split(" ").length;
+
+                            showSolutionToast(
+                                    "Znaleziono rozwiązanie\n"
+                                            + "Czas: " + duration + " ms\n"
+                                            + "Liczba ruchów: " + numberOfMoves,
+                                    5000
+                            );
+                        } else {
+                            textView5.setText(result == null ? "" : result);
+                            showSolutionToast("Nie znaleziono rozwiązania", 2000);
+                        }
+
+                        clearcube();
+                        saveData();
+
+                        // odblokuj przycisk (gdyby user wrócił i próbował ponownie)
+                        solve.setEnabled(true);
+                    });
+
+                }).start();
             }
         });
+
+
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,8 +285,10 @@ public class MainActivity2 extends AppCompatActivity {
                 minproby.setVisibility(View.VISIBLE);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                button20.setBackgroundResource(R.drawable.button2_background);
+                btnKORF.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
+                btnThistle.setBackgroundResource(R.drawable.button2_background);
+
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
                 textNormalizeLBL.setVisibility(View.INVISIBLE);
@@ -273,7 +308,9 @@ public class MainActivity2 extends AppCompatActivity {
                 btnLBL.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                button20.setBackgroundResource(R.drawable.button2_background);
+                btnKORF.setBackgroundResource(R.drawable.button2_background);
+                btnThistle.setBackgroundResource(R.drawable.button2_background);
+
 
                 textParametryLBL.setVisibility(View.VISIBLE);
                 textNormalizeLBL.setVisibility(View.VISIBLE);
@@ -293,7 +330,9 @@ public class MainActivity2 extends AppCompatActivity {
                 btnCFOP.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                button20.setBackgroundResource(R.drawable.button2_background);
+                btnKORF.setBackgroundResource(R.drawable.button2_background);
+                btnThistle.setBackgroundResource(R.drawable.button2_background);
+
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
                 textNormalizeLBL.setVisibility(View.INVISIBLE);
@@ -303,7 +342,7 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-        button20.setOnClickListener(new View.OnClickListener() {
+        btnKORF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAlgorithm = 4;
@@ -312,10 +351,35 @@ public class MainActivity2 extends AppCompatActivity {
                 liczbaruchow.setVisibility(View.INVISIBLE);
                 textView27.setVisibility(View.INVISIBLE);
                 minproby.setVisibility(View.INVISIBLE);
-                button20.setBackgroundResource(R.drawable.selected_button_background);
+                btnKORF.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
+                btnThistle.setBackgroundResource(R.drawable.button2_background);
+
+
+                textParametryLBL.setVisibility(View.INVISIBLE);
+                textNormalizeLBL.setVisibility(View.INVISIBLE);
+                checkBoxNormalizeLBL.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
+        btnThistle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedAlgorithm = 5;
+                textView28.setVisibility(View.INVISIBLE);
+                textView10.setVisibility(View.INVISIBLE);
+                liczbaruchow.setVisibility(View.INVISIBLE);
+                textView27.setVisibility(View.INVISIBLE);
+                minproby.setVisibility(View.INVISIBLE);
+                btnThistle.setBackgroundResource(R.drawable.selected_button_background);
+                btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
+                btnLBL.setBackgroundResource(R.drawable.button2_background);
+                btnCFOP.setBackgroundResource(R.drawable.button2_background);
+                btnKORF.setBackgroundResource(R.drawable.button2_background);
+
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
                 textNormalizeLBL.setVisibility(View.INVISIBLE);
@@ -455,7 +519,9 @@ public class MainActivity2 extends AppCompatActivity {
         btnSelectTwoPhase = findViewById(R.id.btnSelectTwoPhase);
         btnLBL = findViewById(R.id.btnLBL);
         btnCFOP = findViewById(R.id.btnCFOP);
-        button20 = findViewById(R.id.button20);
+        btnKORF = findViewById(R.id.btnKORF);
+        btnThistle = findViewById(R.id.btnThistle);
+
 
         checkBoxNormalizeLBL = findViewById(R.id.checkBoxNormalizeLBL);
         textNormalizeLBL = findViewById(R.id.textNormalizeLBL);
@@ -759,7 +825,9 @@ public class MainActivity2 extends AppCompatActivity {
                 btnSelectTwoPhase.setVisibility(View.INVISIBLE);
                 btnLBL.setVisibility(View.INVISIBLE);
                 btnCFOP.setVisibility(View.INVISIBLE);
-                button20.setVisibility(View.INVISIBLE);
+                btnKORF.setVisibility(View.INVISIBLE);
+                btnThistle.setVisibility(View.INVISIBLE);
+
 
                 textView28.setVisibility(View.INVISIBLE);
                 textView10.setVisibility(View.INVISIBLE);
@@ -769,8 +837,10 @@ public class MainActivity2 extends AppCompatActivity {
 
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                button20.setBackgroundResource(R.drawable.button2_background);
+                btnKORF.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
+                btnThistle.setBackgroundResource(R.drawable.button2_background);
+
 
                 selectedAlgorithm = 1;
 
@@ -871,7 +941,9 @@ public class MainActivity2 extends AppCompatActivity {
                         btnSelectTwoPhase.setVisibility(View.VISIBLE);
                         btnLBL.setVisibility(View.VISIBLE);
                         btnCFOP.setVisibility(View.VISIBLE);
-                        button20.setVisibility(View.VISIBLE);
+                        btnKORF.setVisibility(View.VISIBLE);
+                        btnThistle.setVisibility(View.VISIBLE);
+
                         btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
 
                         textView28.setVisibility(View.VISIBLE);
@@ -960,13 +1032,30 @@ public class MainActivity2 extends AppCompatActivity {
             if(checkBoxNormalizeLBL.isChecked()){
                 result = MoveNormalizer.normalize(result);
             }
-        } else if(selectedAlgorithm == 3) { //CFOP
-            result = com.example.kostkav3.solver.cfop.CfopSolver.getSolutionReportFromFacelets(scrambledCube);
+        }
+        else if(selectedAlgorithm == 3) { //CFOP
+            result = com.example.kostkav3.solver.cfop.CfopSolver.solveFromURFDLB(scrambledCube);
             Log.d("CFOP", result);
             result = com.example.kostkav3.solver.cfop.CfopSolver.extractMovesFromReport(result);
-        }else if(selectedAlgorithm == 4) { //inny
-            Toast.makeText(this, "jeszcze nie zaimplementowany", Toast.LENGTH_SHORT).show();
-        }else {
+        }
+        else if(selectedAlgorithm == 4) { //KORF
+            try {
+                    com.example.kostkav3.solver.Korf_Thistlethwaite.korf.CubeSolver korf =  new com.example.kostkav3.solver.Korf_Thistlethwaite.korf.CubeSolver();
+                    result = korf.solve(getApplicationContext(), scrambledCube, 100_000_000, 30, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = "Błąd solvera: " + e.getClass().getSimpleName();
+            }
+        }
+        else if(selectedAlgorithm == 5) { //Thistlethwaite
+            try {
+                com.example.kostkav3.solver.Korf_Thistlethwaite.thistlewaite.ThistlethwaiteSolver t = new com.example.kostkav3.solver.Korf_Thistlethwaite.thistlewaite.ThistlethwaiteSolver(100_000_000); // 20s
+                result = t.solve(scrambledCube);
+            } catch (Exception e) {
+                result = "Błąd: " + e.getMessage();
+            }
+        }
+        else {
             Toast.makeText(this, "Nie wybrano algorytmu", Toast.LENGTH_SHORT).show();
         }
     }

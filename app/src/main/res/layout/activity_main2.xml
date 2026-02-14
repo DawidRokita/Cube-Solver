@@ -536,7 +536,7 @@
         android:layout_marginEnd="5dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="4"
+        android:weightSum="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/capture_button">
@@ -578,16 +578,26 @@
             tools:visibility="invisible" />
 
         <Button
-            android:id="@+id/button20"
+            android:id="@+id/btnKORF"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
             android:background="@drawable/button2_background"
-            android:text="Inny"
+            android:text="Korf"
             android:textColor="#BEBEBE"
             android:visibility="invisible"
             tools:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnThistle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button2_background"
+            android:text="Thistle"
+            android:textColor="#BEBEBE"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

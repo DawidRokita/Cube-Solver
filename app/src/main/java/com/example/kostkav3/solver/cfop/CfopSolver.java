@@ -10,7 +10,7 @@ import static com.example.kostkav3.solver.cfop.Colors.*;
 public class CfopSolver {
 
 
-    public static String getSolutionReportFromFacelets(String state54) {
+    public static String solveFromURFDLB(String state54) {
 
         //TwoPhase: state -> solved
         String twoPhaseSol = new Search().solution(state54, 21, 100000000, 5000, 0);
