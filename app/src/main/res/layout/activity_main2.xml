@@ -578,24 +578,24 @@
             tools:visibility="invisible" />
 
         <Button
-            android:id="@+id/btnKORF"
+            android:id="@+id/btnTwoPhaseExt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
             android:background="@drawable/button2_background"
-            android:text="Korf"
+            android:text="TwoPhase\nExt"
             android:textColor="#BEBEBE"
             android:visibility="invisible"
             tools:visibility="invisible" />
 
         <Button
-            android:id="@+id/btnThistle"
+            android:id="@+id/btnMetaSolver"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button2_background"
-            android:text="Thistle"
+            android:text="Meta\nSolver"
             android:textColor="#BEBEBE"
             android:visibility="invisible" />
 

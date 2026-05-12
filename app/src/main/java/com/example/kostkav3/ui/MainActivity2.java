@@ -26,7 +26,10 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.kostkav3.MetaSolver;
+import com.example.kostkav3.MetaSolverResult;
 import com.example.kostkav3.R;
+import com.example.kostkav3.SolverResult;
 import com.example.kostkav3.solver.lbl.LblSolverFacade;
 import com.example.kostkav3.solver.lbl.MoveNormalizer;
 import com.example.kostkav3.solver.twophase.Search;
@@ -46,7 +49,7 @@ public class MainActivity2 extends AppCompatActivity {
     int licznik = 0, maxMoves = 21, minProbe = 5000, count_click = 1;
     private Button white, red, green, orange, blue, yellow, divider, reset, lewo, prawo, dol, gora, solve, next, send;
     private Button c1, c2, c3, c4, c5, c6, c7, c8, c9, graphic;
-    private Button btnSelectTwoPhase, btnLBL, btnCFOP, btnKORF, btnThistle;
+    private Button btnSelectTwoPhase, btnLBL, btnCFOP, btnTwoPhaseExt, btnMetaSolver;
     private TextView textView2, textView3, textView4, textView5, textView10, textView27, textView28;
     private CheckBox checkBoxNormalizeLBL;
     private TextView textNormalizeLBL, textParametryLBL;
@@ -186,9 +189,7 @@ public class MainActivity2 extends AppCompatActivity {
                 new Thread(() -> {
                     long startTime = System.currentTimeMillis();
 
-                    // --- LICZENIE W TLE ---
-                    // to ustawia pole "result"
-                    simpleSolve(scrambledCube, maxMoves, minProbe);
+                    result = solveSelectedAlgorithm(scrambledCube, maxMoves, minProbe);
 
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
@@ -208,8 +209,8 @@ public class MainActivity2 extends AppCompatActivity {
                         btnSelectTwoPhase.setVisibility(View.INVISIBLE);
                         btnLBL.setVisibility(View.INVISIBLE);
                         btnCFOP.setVisibility(View.INVISIBLE);
-                        btnKORF.setVisibility(View.INVISIBLE);
-                        btnThistle.setVisibility(View.INVISIBLE);
+                        btnTwoPhaseExt.setVisibility(View.INVISIBLE);
+                        btnMetaSolver.setVisibility(View.INVISIBLE);
 
 
                         textParametryLBL.setVisibility(View.INVISIBLE);
@@ -218,9 +219,9 @@ public class MainActivity2 extends AppCompatActivity {
 
                         btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
                         btnLBL.setBackgroundResource(R.drawable.button2_background);
-                        btnKORF.setBackgroundResource(R.drawable.button2_background);
+                        btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
                         btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                        btnThistle.setBackgroundResource(R.drawable.button2_background);
+                        btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                         graphic.setVisibility(View.VISIBLE);
@@ -285,9 +286,9 @@ public class MainActivity2 extends AppCompatActivity {
                 minproby.setVisibility(View.VISIBLE);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                btnKORF.setBackgroundResource(R.drawable.button2_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                btnThistle.setBackgroundResource(R.drawable.button2_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
@@ -308,8 +309,8 @@ public class MainActivity2 extends AppCompatActivity {
                 btnLBL.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                btnKORF.setBackgroundResource(R.drawable.button2_background);
-                btnThistle.setBackgroundResource(R.drawable.button2_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                 textParametryLBL.setVisibility(View.VISIBLE);
@@ -330,8 +331,8 @@ public class MainActivity2 extends AppCompatActivity {
                 btnCFOP.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                btnKORF.setBackgroundResource(R.drawable.button2_background);
-                btnThistle.setBackgroundResource(R.drawable.button2_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
@@ -342,7 +343,7 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-        btnKORF.setOnClickListener(new View.OnClickListener() {
+        btnTwoPhaseExt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAlgorithm = 4;
@@ -351,11 +352,11 @@ public class MainActivity2 extends AppCompatActivity {
                 liczbaruchow.setVisibility(View.INVISIBLE);
                 textView27.setVisibility(View.INVISIBLE);
                 minproby.setVisibility(View.INVISIBLE);
-                btnKORF.setBackgroundResource(R.drawable.selected_button_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                btnThistle.setBackgroundResource(R.drawable.button2_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
@@ -365,7 +366,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
-        btnThistle.setOnClickListener(new View.OnClickListener() {
+        btnMetaSolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAlgorithm = 5;
@@ -374,11 +375,11 @@ public class MainActivity2 extends AppCompatActivity {
                 liczbaruchow.setVisibility(View.INVISIBLE);
                 textView27.setVisibility(View.INVISIBLE);
                 minproby.setVisibility(View.INVISIBLE);
-                btnThistle.setBackgroundResource(R.drawable.selected_button_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.selected_button_background);
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.button2_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                btnKORF.setBackgroundResource(R.drawable.button2_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
 
 
                 textParametryLBL.setVisibility(View.INVISIBLE);
@@ -519,8 +520,8 @@ public class MainActivity2 extends AppCompatActivity {
         btnSelectTwoPhase = findViewById(R.id.btnSelectTwoPhase);
         btnLBL = findViewById(R.id.btnLBL);
         btnCFOP = findViewById(R.id.btnCFOP);
-        btnKORF = findViewById(R.id.btnKORF);
-        btnThistle = findViewById(R.id.btnThistle);
+        btnTwoPhaseExt = findViewById(R.id.btnTwoPhaseExt);
+        btnMetaSolver = findViewById(R.id.btnMetaSolver);
 
 
         checkBoxNormalizeLBL = findViewById(R.id.checkBoxNormalizeLBL);
@@ -825,8 +826,8 @@ public class MainActivity2 extends AppCompatActivity {
                 btnSelectTwoPhase.setVisibility(View.INVISIBLE);
                 btnLBL.setVisibility(View.INVISIBLE);
                 btnCFOP.setVisibility(View.INVISIBLE);
-                btnKORF.setVisibility(View.INVISIBLE);
-                btnThistle.setVisibility(View.INVISIBLE);
+                btnTwoPhaseExt.setVisibility(View.INVISIBLE);
+                btnMetaSolver.setVisibility(View.INVISIBLE);
 
 
                 textView28.setVisibility(View.INVISIBLE);
@@ -837,9 +838,9 @@ public class MainActivity2 extends AppCompatActivity {
 
                 btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
                 btnLBL.setBackgroundResource(R.drawable.button2_background);
-                btnKORF.setBackgroundResource(R.drawable.button2_background);
+                btnTwoPhaseExt.setBackgroundResource(R.drawable.button2_background);
                 btnCFOP.setBackgroundResource(R.drawable.button2_background);
-                btnThistle.setBackgroundResource(R.drawable.button2_background);
+                btnMetaSolver.setBackgroundResource(R.drawable.button2_background);
 
 
                 selectedAlgorithm = 1;
@@ -941,8 +942,8 @@ public class MainActivity2 extends AppCompatActivity {
                         btnSelectTwoPhase.setVisibility(View.VISIBLE);
                         btnLBL.setVisibility(View.VISIBLE);
                         btnCFOP.setVisibility(View.VISIBLE);
-                        btnKORF.setVisibility(View.VISIBLE);
-                        btnThistle.setVisibility(View.VISIBLE);
+                        btnTwoPhaseExt.setVisibility(View.VISIBLE);
+                        btnMetaSolver.setVisibility(View.VISIBLE);
 
                         btnSelectTwoPhase.setBackgroundResource(R.drawable.selected_button_background);
 
@@ -1023,41 +1024,83 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    public void simpleSolve(String scrambledCube, int maxMoves, int minProbe) {
-        if(selectedAlgorithm == 1) { //TwoPhase
-            result = new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);  //twophase
+    private String solveSelectedAlgorithm(String scrambledCube, int maxMoves, int minProbe) {
+        switch (selectedAlgorithm) {
+
+            case 1: // TwoPhase
+                return new Search().solution(scrambledCube, maxMoves, 100000000, minProbe, 0);
+
+            case 2: { // LBL
+                String lblResult = LblSolverFacade.solveFromURFDLB(scrambledCube);
+
+                if (checkBoxNormalizeLBL.isChecked()) {
+                    lblResult = MoveNormalizer.normalize(lblResult);
+                }
+
+                return lblResult;
+            }
+
+            case 3: { // CFOP
+                String cfopReport = com.example.kostkav3.solver.cfop.CfopSolver.solveFromURFDLB(scrambledCube);
+
+                Log.d("CFOP", cfopReport);
+
+                return com.example.kostkav3.solver.cfop.CfopSolver.extractMovesFromReport(cfopReport);
+            }
+
+            case 4: // TwoPhase Extended
+                return new Search().solution(scrambledCube, 25, 100000000, 100000, 0);
+
+            case 5: { // MetaSolver
+                MetaSolver metaSolver = new MetaSolver();
+                MetaSolverResult metaResult = metaSolver.solve(scrambledCube);
+
+                logMetaSolverStats(metaResult);
+
+                if (metaResult != null && metaResult.bestResult != null) {
+                    return metaResult.bestResult.solution;
+                } else {
+                    return "Brak rozwiązania";
+                }
+            }
+
+            default:
+                return "Nie wybrano algorytmu";
         }
-        else if(selectedAlgorithm == 2) { //LBL
-            result = LblSolverFacade.solveFromURFDLB(scrambledCube);
-            if(checkBoxNormalizeLBL.isChecked()){
-                result = MoveNormalizer.normalize(result);
+    }
+
+    private void logMetaSolverStats(MetaSolverResult metaResult) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("STATYSTYKI ALGORYTMÓW:\n\n");
+
+        if (metaResult != null && metaResult.allResults != null) {
+            for (SolverResult r : metaResult.allResults) {
+                sb.append("Algorytm: ").append(r.algorithmName).append("\n");
+                sb.append("Sukces: ").append(r.success).append("\n");
+                sb.append("Ruchy: ").append(r.moveCount).append("\n");
+                sb.append("Czas: ").append(r.timeMs).append(" ms\n");
+                sb.append("Score: ").append(r.score).append("\n");
+                sb.append("Rozwiązanie: ").append(r.solution).append("\n\n");
             }
         }
-        else if(selectedAlgorithm == 3) { //CFOP
-            result = com.example.kostkav3.solver.cfop.CfopSolver.solveFromURFDLB(scrambledCube);
-            Log.d("CFOP", result);
-            result = com.example.kostkav3.solver.cfop.CfopSolver.extractMovesFromReport(result);
+
+        sb.append("WYBRANY NAJLEPSZY:\n");
+
+        if (metaResult != null && metaResult.bestResult != null) {
+            sb.append(metaResult.bestResult.algorithmName).append("\n");
+            sb.append("Ruchy: ").append(metaResult.bestResult.moveCount).append("\n");
+            sb.append("Czas: ").append(metaResult.bestResult.timeMs).append(" ms\n");
+            sb.append("Rozwiązanie: ").append(metaResult.bestResult.solution).append("\n");
+        } else {
+            sb.append("Brak poprawnego rozwiązania.\n");
         }
-        else if(selectedAlgorithm == 4) { //KORF
-            try {
-                    com.example.kostkav3.solver.Korf_Thistlethwaite.korf.CubeSolver korf =  new com.example.kostkav3.solver.Korf_Thistlethwaite.korf.CubeSolver();
-                    result = korf.solve(getApplicationContext(), scrambledCube, 100_000_000, 30, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-                result = "Błąd solvera: " + e.getClass().getSimpleName();
-            }
+
+        if (metaResult != null) {
+            sb.append("\nCałkowity czas: ").append(metaResult.totalTimeMs).append(" ms");
         }
-        else if(selectedAlgorithm == 5) { //Thistlethwaite
-            try {
-                com.example.kostkav3.solver.Korf_Thistlethwaite.thistlewaite.ThistlethwaiteSolver t = new com.example.kostkav3.solver.Korf_Thistlethwaite.thistlewaite.ThistlethwaiteSolver(100_000_000); // 20s
-                result = t.solve(scrambledCube);
-            } catch (Exception e) {
-                result = "Błąd: " + e.getMessage();
-            }
-        }
-        else {
-            Toast.makeText(this, "Nie wybrano algorytmu", Toast.LENGTH_SHORT).show();
-        }
+
+        Log.d("META_UI", sb.toString());
     }
 
     private void showToast(String message, int duration) {
