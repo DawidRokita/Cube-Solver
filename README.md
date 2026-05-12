@@ -14,6 +14,7 @@ The app allows users to input the cube state manually or via camera, choose diff
   - Two-Phase (Kociemba)
   - LBL (Layer By Layer)
   - CFOP (Cross → F2L → OLL → PLL)
+  - Meta-Solver (parallel algorithm selection system)
 - 📊 **Graphical visualization of solutions**
 - 📡 **Bluetooth support** (optional – robot integration)
 
@@ -37,6 +38,33 @@ Advanced speedcubing method:
 - F2L (First Two Layers)
 - OLL (Orient Last Layer)
 - PLL (Permute Last Layer)
+
+### 🔹 Meta-Solver (Custom Hybrid Solver)
+A custom-developed adaptive solving system that runs multiple solving algorithms in parallel and automatically selects the best solution based on predefined evaluation criteria.
+
+The Meta-Solver:
+- Executes multiple algorithms simultaneously using multithreading
+- Measures:
+  - Solution length
+  - Solving time
+  - Success status
+- Computes a score for each algorithm
+- Automatically selects the best solution
+
+The evaluation score combines:
+- Number of moves
+- Computation time
+
+This allows the application to dynamically balance:
+- Fast solving
+- Short solutions
+- Overall solving efficiency
+
+Implemented solver variants inside the Meta-Solver:
+- LBL
+- CFOP
+- Two-Phase (Fast)
+- Two-Phase Extended Search
 
 ---
 
