@@ -109,7 +109,7 @@ public class CameraXActivity extends AppCompatActivity {
                 cameraProvider.unbindAll();
                 camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
 
-                // domyślny zoom (np. 1.6x). Zmieniaj wg potrzeby.
+                // domyślny zoom
                 camera.getCameraControl().setZoomRatio(1.6f);
 
 
@@ -145,7 +145,7 @@ public class CameraXActivity extends AppCompatActivity {
                     bmp = rotateUsingExif(photoFile.getAbsolutePath(), bmp);
                     bmp = cropCenterSquare(bmp);
 
-                    //Skala do sensownego rozmiaru (dla 3x3 i kolorów wystarczy)
+                    //Skala do sensownego rozmiaru
                     bmp = Bitmap.createScaledBitmap(bmp, 1200, 1200, true);
 
 
@@ -183,10 +183,6 @@ public class CameraXActivity extends AppCompatActivity {
         return Bitmap.createBitmap(src, x, y, size, size);
     }
 
-    /**
-     * Obrót bitmapy na podstawie EXIF z pliku JPG.
-     * Dzięki temu zdjęcie będzie poprawnie obrócone na różnych urządzeniach.
-     */
     private Bitmap rotateUsingExif(String path, Bitmap bitmap) {
         try {
             androidx.exifinterface.media.ExifInterface exif =
@@ -216,7 +212,7 @@ public class CameraXActivity extends AppCompatActivity {
                     bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         } catch (Exception e) {
-            return bitmap; // jak EXIF nie wyjdzie, zwróć bez obrotu
+            return bitmap;
         }
     }
 }

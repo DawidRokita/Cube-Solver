@@ -6,8 +6,10 @@ import android.util.Log;
 
 import com.example.kostkav3.ui.MainActivity5;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -47,39 +49,57 @@ public class BluetoothManager {
     private class ReceiveThread extends Thread {
         @Override
         public void run() {
-            byte[] buffer = new byte[2];
-            int numBytes;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+            String line;
 
-            while (true) {
+            while (!isInterrupted()) {
                 try {
-                    numBytes = inStream.read(buffer);
-                    if (numBytes == 2) {
-                        String receivedHexData = bytesToHex(buffer);
-                        int receivedDecimalData = Integer.parseInt(receivedHexData, 16);
-                        double czas_sekundy = receivedDecimalData / 305.175781;
-                        czas_sekundy = czas_sekundy / 100;
-                        String timeInSeconds = String.format("%.2f", czas_sekundy);
+                    line = reader.readLine();
+                    if (line != null && line.startsWith("CZAS:")) {
+
+                        Log.d("CZAS_DEBUG", "RAW Z ROBOTA: [" + line + "]");
+
+                        String msString = line.replace("CZAS:", "").trim();
+                        long totalMs = Long.parseLong(msString);
+
+                        Log.d("CZAS_DEBUG", "ODEBRANE MS: " + totalMs);
+
+                        String sformatowanyCzas = formatujCzas(totalMs);
+
+                        Log.d("CZAS_DEBUG", "PO FORMATOWANIU: " + sformatowanyCzas);
 
                         MainActivity5.czas_tb.post(new Runnable() {
                             @Override
                             public void run() {
-                                MainActivity5.czas_tb.setText(timeInSeconds + " s");
+                                MainActivity5.czas_tb.setText(sformatowanyCzas);
                             }
                         });
                     }
                 } catch (IOException e) {
                     Log.d("TEST", "Rozłączono ", e);
                     break;
+                } catch (NumberFormatException e) {
+                    Log.e("TEST", "Błąd formatu odebranych danych: " + e.getMessage());
                 }
             }
         }
 
-        private String bytesToHex(byte[] bytes) {
-            StringBuilder sb = new StringBuilder();
-            for (byte b : bytes) {
-                sb.append(String.format("%02X", b));
+
+        private String formatujCzas(long totalMs) {
+            if (totalMs < 1000) {
+                return totalMs + " ms";
             }
-            return sb.toString();
+
+            long minuty = totalMs / 60000;
+            long sekundy = (totalMs % 60000) / 1000;
+            long milisekundy = totalMs % 1000;
+            long setne = milisekundy / 10;
+
+            if (minuty == 0) {
+                return String.format("%d.%02d s", sekundy, setne);
+            } else {
+                return String.format("%d:%02d.%02d", minuty, sekundy, setne);
+            }
         }
     }
 }
